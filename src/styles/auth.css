@@ -4,13 +4,16 @@
 }
 
 /* база */
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   margin: 0;
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+  background-attachment: fixed;
   color: #fff;
   box-sizing: border-box;
 }
@@ -24,7 +27,7 @@ html, body, #root {
 }
 
 /* контейнер інтерфейсу */
-.auth-root{
+.auth-root {
   width: 100%;
   min-height: 100vh;
   display: flex;
@@ -32,102 +35,180 @@ html, body, #root {
   justify-content: center;
 }
 
-.auth-container{
-  width:100%;
-  max-width:420px;
+.auth-container {
+  width: 100%;
+  max-width: 420px;
   padding: 36px 20px 80px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  text-align:center;
-  box-sizing:border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.auth-container-login {
+  max-height: 100vh;
+}
+
+.auth-container-signup {
+  min-height: 100vh;
+  padding-top: 160px;
+}
+
+.auth-container-signup.author-mode {
+  padding-top: 160px;
+  /* Keep same on mobile */
+}
+
+@media (min-width: 768px) {
+  .auth-container-signup.author-mode {
+    padding-top: 488px;
+    /* Only increase on laptop */
+  }
 }
 
 /* логотип-картка (якщо створюєш через CSS) */
-.logo-card{
-  width:96px;
-  height:96px;
-  border-radius:16px;
-  background:#f6f7f8;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin-bottom:18px;
-  box-shadow: 0 12px 28px rgba(0,0,0,0.28);
+.logo-card {
+  width: 96px;
+  height: 96px;
+  border-radius: 16px;
+  background: #f6f7f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
 }
-.logo-img{ width:56px; height:56px; object-fit:contain; }
+
+.logo-img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
 
 /* заголовки */
-.title{
-  font-size:40px;
-  line-height:1;
-  font-weight:800;
-  margin:6px 0 8px;
-  color:#fff;
+.title {
+  font-size: 40px;
+  line-height: 1;
+  font-weight: 800;
+  margin: 6px 0 8px;
+  color: #fff;
 }
-.subtitle{
-  color: rgba(255,255,255,0.9);
-  font-size:16px;
-  margin-bottom:18px;
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 16px;
+  margin-bottom: 18px;
 }
 
 /* інпути */
-.input{
-  width:100%;
-  height:52px;
-  border-radius:12px;
-  background: rgba(255,255,255,0.03);
-  border:1px solid rgba(255,255,255,0.06);
+.input {
+  width: 100%;
+  height: 52px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   padding: 12px 16px;
   color: #fff;
-  margin-top:12px;
-  box-sizing:border-box;
+  margin-top: 12px;
+  box-sizing: border-box;
 }
-.input::placeholder{ color: rgba(255,255,255,0.4); }
-.textarea{ height:120px; padding-top:12px; resize:none; text-align:left; }
+
+.input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.textarea {
+  height: 120px;
+  padding-top: 12px;
+  resize: none;
+  text-align: left;
+}
 
 /* чекбокс */
-.checkbox-row{ display:flex; align-items:center; gap:12px; margin-top:14px; align-self:flex-start; }
-.checkbox{ width:22px; height:22px; border-radius:6px; border:2px solid rgba(255,255,255,0.6); display:inline-flex; align-items:center; justify-content:center; }
-.checkbox.checked{ background:#0971a8; border-color:#0971a8; }
-.checkbox .tick{ width:8px; height:8px; background:#fff; border-radius:2px; }
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+  align-self: flex-start;
+}
+
+.checkbox {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkbox.checked {
+  background: #0971a8;
+  border-color: #0971a8;
+}
+
+.checkbox .tick {
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  border-radius: 2px;
+}
 
 /* подписи */
-.small-label{ align-self:flex-start; color:rgba(255,255,255,0.9); margin-top:12px; margin-bottom:6px; font-weight:600; }
-.note{ color: rgba(255,255,255,0.85); margin-top:10px; margin-bottom:6px; font-size:14px; }
+.small-label {
+  align-self: flex-start;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 12px;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.note {
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 10px;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
 
 /* CTA */
-.cta{
-  width:100%;
-  height:56px;
-  border-radius:16px;
-  background:#0b3b5a;
+.cta {
+  width: 100%;
+  height: 56px;
+  border-radius: 16px;
+  background: #0b3b5a;
   color: var(--cta-blue);
-  font-weight:700;
-  font-size:18px;
+  font-weight: 700;
+  font-size: 18px;
   border: none;
   cursor: pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   box-shadow: 0 10px 18px rgba(59, 34, 34, 0.18);
-  margin-top:6px;
+  margin-top: 6px;
 }
-.cta:active{ transform: translateY(1px); }
+
+.cta:active {
+  transform: translateY(1px);
+}
 
 /* link */
-.link{
-  margin-top:14px;
-  background:none;
-  border:none;
-  color:#ffffff;
-  text-decoration:underline;
-  font-size:16px;
-  cursor:pointer;
+.link {
+  margin-top: 14px;
+  background: none;
+  border: none;
+  color: #ffffff;
+  text-decoration: underline;
+  font-size: 16px;
+  cursor: pointer;
 }
+
 /* ------------- Виправлення видимості CTA ------------- */
-.cta {           
-  color: var(--cta-blue) !important;         /* синій текст */
+.cta {
+  color: var(--cta-blue) !important;
+  /* синій текст */
   font-weight: 700 !important;
   font-size: 18px !important;
   height: 56px !important;
@@ -137,10 +218,12 @@ html, body, #root {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  width: calc(100% - 0px) !important;        /* повна ширина контейнера */
-  box-shadow: 0 10px 18px rgba(0,0,0,0.18) !important;
+  width: calc(100% - 0px) !important;
+  /* повна ширина контейнера */
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.18) !important;
   position: relative !important;
-  z-index: 9999 !important;                   /* поверх фону або псевдоелементів */
+  z-index: 9999 !important;
+  /* поверх фону або псевдоелементів */
 }
 
 .cta-text {
@@ -152,7 +235,13 @@ html, body, #root {
 }
 
 /* responsive */
-@media (max-width:380px){
-  .title{ font-size:34px; }
-  .auth-container{ padding-top:28px; padding-bottom:60px; }
+@media (max-width:380px) {
+  .title {
+    font-size: 34px;
+  }
+
+  .auth-container {
+    padding-top: 28px;
+    padding-bottom: 60px;
+  }
 }

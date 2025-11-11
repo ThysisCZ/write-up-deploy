@@ -20,7 +20,7 @@ export default function SignUpScreen({ onLogin = () => { }, onRegisterSuccess = 
 
   return (
     <div className="auth-root">
-      <div className="auth-container">
+      <div className={`auth-container auth-container-signup ${isAuthor ? 'author-mode' : ''}`} >
         <LogoCard />
         <h1 className="title">Welcome</h1>
         <p className="subtitle">Sign up to get started</p>

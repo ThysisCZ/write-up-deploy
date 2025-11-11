@@ -19,14 +19,16 @@ export default function LoginScreen({ onSignUp = () => { }, onLoginSuccess = () 
 
   return (
     <div className="auth-root">
-      <div className="auth-container">
-        <LogoCard />
+      <div className="auth-container auth-container-login">
+        <div>
+          <LogoCard />
+        </div>
         <h1 className="title">Welcome</h1>
         <p className="subtitle">Log in to your account</p>
         <input className="input" placeholder="Email" />
         <input className="input" type="password" placeholder="Password" />
 
-        <button className="cta" onClick={handleLogin}>{
+        <button className="cta" onClick={handleLogin} style={{ marginTop: 18 }}>{
           loginCall.state === "pending" ?
             <ClipLoader color="white" size={20} /> : "Log in"
         }
