@@ -5,6 +5,7 @@ import WelcomeScreen from './components/WelcomeScreen';
 import SignUpScreen from './components/SignUpScreen';
 import LoginScreen from './components/LoginScreen';
 import HomeScreen from './components/HomeScreen';
+import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 
 const pageVariants = {
   initial: direction => ({
@@ -38,6 +39,29 @@ export default function App() {
     setScreen(next);
   }
 
+  const navTo = useNavigate();
+
+  // URI-based route switching
+  return (
+    <div style={{ position:"relative", width:"100%", height:"100%", overflowX:"hidden"}}>
+      <Routes>
+        <Route path="/" element={<WelcomeScreen onGetStarted={() => navTo('/signup')} onLogin={() => navTo('/login')} />}/>
+        <Route path="/login" element={<LoginScreen onSignUp={() => navTo('signup')} onLoginSuccess={() => navTo('home')} />}/>
+        <Route path="/signup" element={<SignUpScreen onLogin={() => navTo('login')} onRegisterSuccess={() => navTo('home')} />}/>
+        <Route path="/home" element={<HomeScreen setScreen={navTo} />}/>
+      </Routes>
+    </div>
+  );
+  /*
+    Additional routes
+    /profile (with user ID query)
+    /book    (with book ID query)
+    /chapter (with book ID and chapter ID query)
+    ...
+  */
+
+
+  // Previous state-based route switching, with animations
   return (
     <div style={{ position:"relative", width:"100%", height:"100%", overflowX:"hidden"}}>
       <AnimatePresence mode="wait" initial={false}>
