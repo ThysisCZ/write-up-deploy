@@ -20,7 +20,7 @@ export default function SignUpScreen({ onLogin = () => {} }) {
           <div style={{ color: '#fff' }}>I want to be an author</div>
         </div>
 
-        {isAuthor && (
+        {/*isAuthor && (
           <>
             <div className="small-label">Author biography</div>
             <textarea className="input textarea" placeholder="Short biography (min 20 characters)" />
@@ -29,7 +29,7 @@ export default function SignUpScreen({ onLogin = () => {} }) {
             <input className="input" placeholder="e.g. Fantasy, Sci-fi, Drama" />
             <div className="note">Separate multiple genres with commas. At least one genre is recommended.</div>
           </>
-        )}
+        )*/}
 
         <button className="cta" style={{ marginTop: 18 }}>Sign up</button>
         <button className="link" onClick={onLogin}>Already have an account? Log in</button>
