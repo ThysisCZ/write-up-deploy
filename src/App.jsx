@@ -5,15 +5,17 @@ import WelcomeScreen from './components/WelcomeScreen';
 import SignUpScreen from './components/SignUpScreen';
 import LoginScreen from './components/LoginScreen';
 import HomeScreen from './components/HomeScreen';
+import CreateBookScreen from './components/CreateBookScreen';
+import ProfileScreen from './components/ProfileScreen';
 import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
 
 const pageVariants = {
-  
+
   initial: direction => ({
     opacity: 0,
     x: direction > 0 ? 50 : -50,   // slide from right for forward, left for back
     scale: 0.99,
-    transition: { duration:0.01 }
+    transition: { duration: 0.01 }
   }),
 
   animate: {
@@ -22,7 +24,7 @@ const pageVariants = {
     scale: 1,
     transition: { duration: 0.36, ease: [0.2, 0.8, 0.2, 1] },
   },
-  
+
   exit: direction => ({
     opacity: 0,
     x: direction < 0 ? 50 : -50,   // slide out opposite direction
@@ -43,12 +45,8 @@ export default function App() {
     // simple heuristic: welcome <-> signup <-> login <-> home ordering
     const order = { welcome: 0, signup: 1, login: 2, home: 3 };
     setDirection(order[next] >= order[screen] ? 1 : -1);
-    navTo( next );
+    navTo(next);
   }
-
-
-
-
 
   const location = useLocation();
   const { pathname } = location;
@@ -70,10 +68,10 @@ export default function App() {
   //Which state to animate to 
   function animationStateController() {
 
-    if (entering) return {...pageVariants.initial(direction)}
+    if (entering) return { ...pageVariants.initial(direction) }
 
-    if (!animating) return {...pageVariants.animate}
-    if (animating) return {...pageVariants.exit(direction)}
+    if (!animating) return { ...pageVariants.animate }
+    if (animating) return { ...pageVariants.exit(direction) }
 
   }
 
@@ -85,7 +83,7 @@ export default function App() {
       setAnimating(false);
       setEntering(true);
     }
-    
+
     if (entering) {
       setEntering(false);
     }
@@ -95,62 +93,88 @@ export default function App() {
   // URI-based route switching
   return (
     <div style={{ position: "relative", width: "100%", height: "100%", overflowX: "hidden" }}>
-      
+
       <AnimatePresence mode="wait">
         <Routes>
-          
-          <Route path="/" 
-            element={
-               <motion.div
-                animate={animationStateController()}
-                onAnimationComplete={ () => handleAnimationFinish() }
 
-                style={{ width: '100%' }}
-              >
-                <WelcomeScreen onGetStarted={() => navTo('/signup',1)} onLogin={() => navTo('/login',1)} />
-              </motion.div>
-            } />
-          
-
-          <Route path="/login" 
-            element={
-               <motion.div
-                animate={animationStateController()}
-                onAnimationComplete={ () => handleAnimationFinish() }
-
-                style={{ width: '100%' }}
-              >
-            
-                <LoginScreen onSignUp={() => navTo('signup',1)} onLoginSuccess={() => navTo('home',1)} />
-              </motion.div>
-          } />
-
-  
-          <Route path="/signup" 
+          <Route path="/"
             element={
               <motion.div
                 animate={animationStateController()}
-                onAnimationComplete={ () => handleAnimationFinish() }
+                onAnimationComplete={() => handleAnimationFinish()}
 
                 style={{ width: '100%' }}
               >
-
-                <SignUpScreen onLogin={() => navTo('login',-1)} onRegisterSuccess={() => navTo('home',1)} />
+                <WelcomeScreen onGetStarted={() => navTo('/signup', 1)} onLogin={() => navTo('/login', 1)} />
               </motion.div>
-          } />
+            } />
 
-          <Route path="/home" 
+
+          <Route path="/login"
             element={
-              ( pathname==="/home" && <motion.div
+              <motion.div
                 animate={animationStateController()}
-                onAnimationComplete={ () => handleAnimationFinish() }
+                onAnimationComplete={() => handleAnimationFinish()}
 
                 style={{ width: '100%' }}
               >
-            
-              <HomeScreen setScreen={navTo} />
-            </motion.div>)
-        } />
+
+                <LoginScreen onSignUp={() => navTo('signup', 1)} onLoginSuccess={() => navTo('home', 1)} />
+              </motion.div>
+            } />
+
+
+          <Route path="/signup"
+            element={
+              <motion.div
+                animate={animationStateController()}
+                onAnimationComplete={() => handleAnimationFinish()}
+
+                style={{ width: '100%' }}
+              >
+
+                <SignUpScreen onLogin={() => navTo('login', -1)} onRegisterSuccess={() => navTo('home', 1)} />
+              </motion.div>
+            } />
+
+          <Route path="/home"
+            element={
+              (pathname === "/home" && <motion.div
+                animate={animationStateController()}
+                onAnimationComplete={() => handleAnimationFinish()}
+
+                style={{ width: '100%' }}
+              >
+
+                <HomeScreen pathname={pathname} setScreen={navTo} />
+              </motion.div>)
+            } />
+
+          <Route path="/books"
+            element={
+              (pathname === "/books" && <motion.div
+                animate={animationStateController()}
+                onAnimationComplete={() => handleAnimationFinish()}
+
+                style={{ width: '100%' }}
+              >
+
+                <CreateBookScreen pathname={pathname} setScreen={navTo} />
+              </motion.div>)
+            } />
+
+          <Route path="/profile"
+            element={
+              (pathname === "/profile" && <motion.div
+                animate={animationStateController()}
+                onAnimationComplete={() => handleAnimationFinish()}
+
+                style={{ width: '100%' }}
+              >
+
+                <ProfileScreen pathname={pathname} setScreen={navTo} />
+              </motion.div>)
+            } />
         </Routes>
       </AnimatePresence>
     </div>
