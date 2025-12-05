@@ -1,0 +1,218 @@
+/* create-book-modal.css
+  компактне модальне віконце + акуратні chapter-рядки
+*/
+
+/* overlay */
+.cbm-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(6, 12, 18, 0.55);
+  z-index: 1200;
+  padding: 20px;
+}
+
+/* modal - smaller */
+.cbm-modal {
+  width: 520px;                /* основна ширина */
+  max-width: 92vw;            /* мобільна fallback */
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(8,26,36,0.98), rgba(6,18,28,0.96));
+  box-shadow: 0 20px 60px rgba(3,10,18,0.7);
+  padding: 20px 22px;         /* компактніші відступи */
+  color: #fff;
+  box-sizing: border-box;
+}
+
+/* close button small top-right */
+.cbm-close {
+  position: absolute;
+  right: 18px;
+  top: 16px;
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.75);
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* header */
+.cbm-title {
+  margin: 6px 0 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+.cbm-sub {
+  margin: 6px 0 14px;
+  color: rgba(255,255,255,0.6);
+  font-size: 14px;
+}
+
+/* labels & inputs (compact) */
+.cbm-label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.9);
+  font-size: 13px;
+}
+
+.cbm-input,
+.cbm-textarea {
+  width: 100%;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.03);
+  color: rgba(255,255,255,0.95);
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.cbm-textarea {
+  min-height: 84px;
+  resize: vertical;
+}
+
+/* chapter add row - compact */
+.cbm-chapter-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+/* add button */
+.cbm-btn {
+  background: rgba(255,255,255,0.04);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.04);
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.cbm-btn:active { transform: translateY(1px); }
+
+.cbm-btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.cbm-btn-primary {
+  background: rgba(255,255,255,0.95);
+  color: #092033;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 12px;
+}
+
+/* Chapter list — компактний та акуратний */
+.cbm-chapter-list {
+  list-style: none;
+  padding: 10px 0 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* кожен рядок chapter */
+.cbm-chapter-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 10px;
+  background: rgba(10, 28, 42, 0.25);
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.02);
+  box-shadow: 0 6px 14px rgba(2,10,20,0.25);
+}
+
+/* лівий блок: індекс + текст */
+.cbm-chapter-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.cbm-chapter-index {
+  color: rgba(255,255,255,0.6);
+  font-weight: 700;
+  min-width: 20px;
+  text-align: right;
+  font-size: 13px;
+}
+
+.cbm-chapter-text {
+  color: rgba(255,255,255,0.95);
+  font-size: 14px;
+  line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 340px; /* дозволяємо урізання */
+}
+
+/* input під редагування (компакт) */
+.cbm-chapter-editinput {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.04);
+  color: #fff;
+  padding: 6px 8px;
+  border-radius: 8px;
+  min-width: 180px;
+  width: clamp(160px, 52%, 340px);
+  box-sizing: border-box;
+}
+
+/* правий блок кнопок */
+.cbm-chapter-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* small btn styles */
+.cbm-btn-sm {
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* danger remove */
+.cbm-btn-danger {
+  color: rgba(255,120,120,0.95);
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* bottom actions */
+.cbm-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
+/* disabled look for create */
+.cbm-btn-primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* responsive smaller screens */
+@media (max-width: 520px) {
+  .cbm-modal { width: 92vw; padding: 16px; }
+  .cbm-chapter-text { max-width: 40vw; white-space: normal; }
+  .cbm-chapter-editinput { width: 62%; }
+}

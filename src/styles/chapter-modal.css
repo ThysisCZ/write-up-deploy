@@ -1,0 +1,30 @@
+/* src/styles/chapter-modal.css */
+.cm-overlay {
+  position: fixed;
+  inset: 0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(2,8,14,0.6);
+  z-index:1300;
+}
+.cm-modal {
+  width: min(820px, 92%);
+  max-height: 86vh;
+  overflow:auto;
+  background: linear-gradient(180deg, rgba(6,26,40,0.98), rgba(3,18,28,0.95));
+  border-radius: 12px;
+  padding: 20px;
+  color: #fff;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  position: relative;
+}
+.cm-close { position:absolute; right:12px; top:10px; background:none; border:none; color:#fff; font-size:20px; cursor:pointer; }
+.cm-title { margin:0 0 10px; font-size:22px; font-weight:700; }
+.cm-content { color: rgba(255,255,255,0.9); line-height:1.7; white-space:pre-wrap; }
+.cm-edit { display:flex; flex-direction:column; gap:8px; }
+.cm-input { width:100%; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); color:#fff; }
+.cm-textarea { width:100%; min-height:220px; padding:12px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); color:#fff; resize:vertical; }
+.cm-actions { display:flex; gap:10px; margin-top:12px; }
+.cm-btn { padding:10px 14px; border-radius:10px; cursor:pointer; background: rgba(255,255,255,0.04); color:#fff; border:1px solid rgba(255,255,255,0.03); }
+.cm-save { background: rgba(70,150,220,0.16); }

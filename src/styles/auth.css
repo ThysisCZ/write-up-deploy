@@ -1,32 +1,12 @@
-:root {
-  --bg-top: #0b3b5a;
+:root{
+  --bg-top: #0b3b5a;    /* keep these as fallback, same as post-auth */
   --bg-bottom: #042235;
+  --panel-bg: rgba(14,39,53,0.6);
+  --muted: rgba(255,255,255,0.45);
+  --accent: #092033;
 }
 
-/* база */
-html,
-body,
-#root {
-  height: 100%;
-  margin: 0;
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
-  background-attachment: fixed;
-  color: #fff;
-  box-sizing: border-box;
-}
-
-/* ГАРАНТОВАНЕ центрування через #root */
-#root {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 0 !important;
-}
-
-/* контейнер інтерфейсу */
+/* base form styles for auth screens (no #root centering here!) */
 .auth-root {
   width: 100%;
   min-height: 100vh;
@@ -41,211 +21,44 @@ body,
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center; /* <- важливо: центр по вертикалі */
   text-align: center;
   box-sizing: border-box;
+  margin: 0 auto;
+  padding: 0 16px; /* якщо треба відступи по боках */
+  min-height: 100vh; /* щоб контейнер займав висоту вікна */
 }
-
-.auth-container-login {
-  max-height: 100vh;
-}
-
-.auth-container-signup {
-  min-height: 100vh;
-  padding-top: 50px;
-}
-
-.auth-container-signup.author-mode {
-  padding-top: 50px;
-}
-
-/* Set the same padding on laptop during author mode */
-@media (min-width: 768px) {
-  .auth-container-signup.author-mode {
-    padding-top: 50px;
-  }
-}
-
-/* логотип-картка (якщо створюєш через CSS) */
-.logo-card {
-  width: 96px;
-  height: 96px;
-  border-radius: 16px;
-  background: #f6f7f8;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 18px;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
-}
-
-.logo-img {
-  width: 56px;
-  height: 56px;
-  object-fit: contain;
-}
-
-/* заголовки */
-.title {
-  font-size: 40px;
-  line-height: 1;
-  font-weight: 800;
-  margin: 6px 0 8px;
-  color: #fff;
-}
-
-.subtitle {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 16px;
-  margin-bottom: 18px;
-}
-
-/* інпути */
-.input {
-  width: 100%;
-  height: 52px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  padding: 12px 16px;
-  color: #fff;
-  margin-top: 12px;
-  box-sizing: border-box;
-}
-
-.input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
-}
-
 .error-message {
-  color: #f76363;
-  text-align: left;
-  width:100%;
-}
-
-.textarea {
-  height: 120px;
-  padding-top: 12px;
-  resize: none;
-  text-align: left;
-}
-
-/* чекбокс */
-.checkbox-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 14px;
-  align-self: flex-start;
-}
-
-.checkbox {
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  border: 2px solid rgba(255, 255, 255, 0.6);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.checkbox.checked {
-  background: #0971a8;
-  border-color: #0971a8;
-}
-
-.checkbox .tick {
-  width: 8px;
-  height: 8px;
-  background: #fff;
-  border-radius: 2px;
-}
-
-/* подписи */
-.small-label {
-  align-self: flex-start;
-  color: rgba(255, 255, 255, 0.9);
-  margin-top: 12px;
-  margin-bottom: 6px;
+  color: #f76363;              /* червоний як раніше */
+  text-align: left !important; /* перезаписує будь-яке центрування від батьків */
+  font-size: 14px !important;  /* нормальний розмір */
+  line-height: 1.3;
+  margin: 8px 0 0 0;           /* невеликий відступ зверху від інпута */
+  display: block;
+  width: 100%;
   font-weight: 600;
 }
 
-.note {
-  color: rgba(255, 255, 255, 0.85);
-  margin-top: 10px;
-  margin-bottom: 6px;
-  font-size: 14px;
-}
-
-/* CTA */
-.cta {
-  width: 100%;
-  height: 56px;
-  border-radius: 16px;
-  background: #0b3b5a;
-  color: var(--cta-blue);
-  font-weight: 700;
-  font-size: 18px;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 10px 18px rgba(59, 34, 34, 0.18);
-  margin-top: 6px;
-}
-
-.cta:active {
-  transform: translateY(1px);
-}
-
-/* link */
 .link {
   margin-top: 14px;
-  background: none;
-  border: none;
-  color: #ffffff;
+  background: none !important;
+  border: none !important;
+  color: #ffffff !important;
   text-decoration: underline;
   font-size: 16px;
   cursor: pointer;
-}
-
-/* ------------- Виправлення видимості CTA ------------- */
-.cta {
-  color: var(--cta-blue) !important;
-  /* синій текст */
-  font-weight: 700 !important;
-  font-size: 18px !important;
-  height: 56px !important;
-  border-radius: 16px !important;
-  border: none !important;
-  padding: 0 20px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: calc(100% - 0px) !important;
-  /* повна ширина контейнера */
-  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.18) !important;
-  position: relative !important;
-  z-index: 9999 !important;
-  /* поверх фону або псевдоелементів */
-}
-
-.cta-text {
+  padding: 0 !important;
+  box-shadow: none !important;
   display: inline-block;
-  color: var(--cta-blue) !important;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 56px;
 }
 
-/* responsive */
-@media (max-width:380px) {
-  .title {
-    font-size: 34px;
-  }
+.title { font-size: 40px; line-height: 1; font-weight: 800; margin: 6px 0 8px; color: #fff; }
+.subtitle { color: rgba(255,255,255,0.9); font-size: 16px; margin-bottom: 18px; }
 
-  .auth-container {
-    padding-top: 28px;
-    padding-bottom: 60px;
-  }
-}
+.input { width: 100%; height: 52px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); padding: 12px 16px; color: #fff; margin-top: 12px; box-sizing: border-box; }
+.input::placeholder { color: rgba(255,255,255,0.4); }
+
+.cta { width: 100%; height: 56px; border-radius: 16px; background: #0b3b5a; color: white; font-weight: 700; font-size: 18px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 18px rgba(0,0,0,0.18); margin-top: 6px; }
+
+/* keep responsive tweaks */
+@media (max-width:380px) { .title { font-size: 34px; } .auth-container { padding-top: 28px; padding-bottom: 60px; } }

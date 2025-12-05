@@ -1,0 +1,141 @@
+/* mybooks.css */
+:root {
+  --bg: #0f2b3a;
+  --panel: rgba(14,39,53,0.75);
+  --card: rgba(16,46,64,0.6);
+  --muted: rgba(255,255,255,0.45);
+  --accent: #092033;
+}
+
+/* src/styles/mybooks.css */
+.mybooks-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* НЕ ставимо тут свій градієнт — беремо фон з body / global */
+  background: transparent;
+  color: #fff;
+}
+
+.mybooks-main {
+  flex: 1 1 auto;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 36px 16px 90px; /* leave space for navbar */
+  box-sizing: border-box;
+}
+
+.mybooks-title {
+  font-size: 48px;
+  text-align: center;
+  margin: 8px 0 28px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.create-btn {
+  width: 100%;
+  background: #f3f5f7;
+  color: #092033;
+  border-radius: 20px;
+  padding: 18px 20px;
+  font-size: 18px;
+  font-weight: 700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow: 0 6px 0 rgba(0,0,0,0.06) inset;
+  border: none;
+  cursor: pointer;
+}
+
+.create-btn .plus {
+  margin-right: 10px;
+  font-size: 20px;
+}
+
+.books-list {
+  margin-top: 26px;
+  padding: 0 24px 40px;
+  display: grid;
+  gap: 22px;
+}
+
+.no-books {
+  padding: 40px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 16px;
+  background: transparent;
+}
+
+.book-card {
+  background: rgba(14,39,53,0.55);
+  border-radius: 24px;
+  padding: 22px;
+  box-shadow: 0 6px 18px rgba(6,18,28,0.3);
+}
+
+.book-title {
+  margin: 0 0 10px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.book-meta {
+  margin-bottom: 18px;
+  color: var(--muted);
+}
+
+.book-actions {
+  display:flex;
+  gap: 16px;
+}
+
+.btn {
+  border-radius: 26px;
+  padding: 12px 28px;
+  background: rgba(10,36,56,0.45);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  box-shadow: inset 0 -2px 0 rgba(255,255,255,0.03);
+}
+
+.btn-view {
+  box-shadow: 0 0 0 3px rgba(77,163,255,0.08) inset;
+}
+
+.mybooks-footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 12px;
+  display:flex;
+  justify-content:center;
+  pointer-events: none; /* inner navbar will accept clicks */
+}
+
+/* ensure navbar inside footer has pointer events */
+.mybooks-footer > * { pointer-events: auto; }
+
+/* кнопка delete (в рядку дій) */
+.book-actions { display:flex; gap:12px; align-items:center; margin-top:8px; }
+
+.btn-delete {
+  border-radius: 20px;
+  padding: 10px 16px;
+  background: rgba(255, 70, 70, 0.08);
+  color: #ffb6b6;
+  border: 1px solid rgba(255,70,70,0.15);
+  cursor: pointer;
+  font-weight: 700;
+  transition: transform .08s, box-shadow .08s;
+}
+
+.btn-delete:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.14);
+}

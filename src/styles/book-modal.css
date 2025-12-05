@@ -1,0 +1,149 @@
+.bm-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(7, 18, 28, 0.5);
+  z-index: 60;
+  padding: 20px;
+}
+.bm-modal {
+  width: min(720px, 94%);
+  max-height: 90vh;
+  overflow: auto;
+  background: linear-gradient(180deg, rgba(9,34,55,0.95), rgba(8,24,36,0.95));
+  border-radius: 12px;
+  padding: 22px;
+  box-shadow: 0 20px 40px rgba(2,8,16,0.6);
+  color: #e6eef0;
+  position: relative;
+}
+.bm-close {
+  position: absolute;
+  right: 14px;
+  top: 10px;
+  background: transparent;
+  color: #a9c4d6;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+.bm-title {
+  margin: 4px 0 6px 0;
+  font-size: 22px;
+  color: #fff;
+}
+.bm-sub {
+  margin: 0 0 14px 0;
+  color: #98b4c9;
+  font-size: 13px;
+}
+.bm-chapters { display:flex; flex-direction:column; gap:12px; }
+.bm-chapter {
+  background: rgba(255,255,255,0.02);
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px solid rgba(255,255,255,0.02);
+}
+.bm-chapter-header { display:flex; gap:10px; align-items:center; margin-bottom:8px; }
+.bm-chapter-index { font-weight:700; color:#9fc7ff; width:28px; text-align:center; }
+.bm-chapter-title { font-weight:700; color:#fff; }
+.bm-chapter-title-input { flex:1; background: rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.03); color:#e6eef0; padding:6px 8px; border-radius:8px; }
+.bm-chapter-textarea { width:100%; min-height:90px; max-height:320px; resize:vertical; padding:10px; border-radius:8px; background: rgba(255,255,255,0.02); color:#e6eef0; border:1px solid rgba(255,255,255,0.03); }
+.bm-chapter-content { color:#c9d9e4; font-size:14px; white-space:pre-wrap; }
+.bm-empty { color:#8da3b8; }
+.bm-pre { margin:0; font-family:inherit; }
+.bm-remove { background:transparent; border:none; color:#ffb3b3; cursor:pointer; margin-left:8px; }
+.bm-actions { display:flex; gap:12px; align-items:center; margin-top:14px; }
+.bm-btn { padding:10px 14px; border-radius:10px; border:none; cursor:pointer; font-weight:700; }
+.bm-ghost { background: rgba(255,255,255,0.03); color:#d8eef7; }
+.bm-primary { background:#e6eef0; color:#072034; }
+.bm-add { background:rgba(18,85,140,0.14); color:#bfe0ff; border-radius:8px; }
+
+/* === Fix: chapter content wrap & box clipping ===
+  Додаємо в book-modal.css або у файл стилів для MyBooks/BookModal
+*/
+.book-modal, .book-view, .bm-modal, .mb-card { box-sizing: border-box; }
+
+/* карточка чаптера — обмежуємо overflow і даємо внутрішні відступи */
+.book-chapter,
+.chapter-card,
+.bm-chapter {
+  background: rgba(14,39,53,0.45);
+  padding: 18px;
+  border-radius: 14px;
+  margin-bottom: 16px;
+  overflow: hidden;              /* щоб довгі елементи не вистрибували за рамку */
+  word-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+
+/* заголовок (номер + назва) */
+.chapter-title,
+.book-chapter .title {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+/* індекс */
+.chapter-index {
+  color: rgba(120,160,220,0.95);
+  min-width: 30px;
+  text-align: right;
+  font-weight: 800;
+}
+
+/* Текст чаптера — головне правило, яке змушує переносити рядки */
+.chapter-body,
+.book-chapter .content,
+.cbm-chapter-text,
+.bm-chapter-text {
+  margin-top: 10px;
+  white-space: normal !important;      /* дозволяємо переноси рядків */
+  overflow-wrap: anywhere;            /* переносить дуже довгі слова/URL */
+  word-break: break-word;             /* резервний варіант для старих браузерів */
+  line-height: 1.45;
+  color: rgba(255,255,255,0.9);
+}
+
+/* Якщо у вас є <pre> або інші елементи, які викликають overflow — обмежимо їх */
+.chapter-body pre,
+.chapter-body code {
+  white-space: pre-wrap;              /* зберігає форматування, але дозволяє переноси */
+  overflow-wrap: anywhere;
+}
+
+/* Додатково — щоб скрол не з'їдав тінь або border-radius */
+.chapter-body > * { max-width: 100%; box-sizing: border-box; }
+
+/* ===== Loader overlay for BookDetail ===== */
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.loader-spinner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #ffffff;
+  animation: bookdetail-spin 0.8s linear infinite;
+}
+
+@keyframes bookdetail-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+

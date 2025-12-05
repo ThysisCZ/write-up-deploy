@@ -1,3 +1,4 @@
+// src/App.jsx
 import React, { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
@@ -12,9 +13,7 @@ import BookDetail from "./components/BookDetail";
 export default function App() {
   const navigate = useNavigate();
 
-  // ===============================
-  // GLOBAL BOOK STATE
-  // ===============================
+  // GLOBAL BOOK STATE (синхронізація з localStorage)
   const [books, setBooks] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem("mybooks") || "[]");
@@ -24,61 +23,35 @@ export default function App() {
   });
 
   useEffect(() => {
-    localStorage.setItem("mybooks", JSON.stringify(books));
+    try { localStorage.setItem("mybooks", JSON.stringify(books)); } catch (e) { console.warn(e); }
   }, [books]);
 
-  // ===============================
-  // CREATE BOOK
-  // ===============================
+  // CREATE BOOK helper (отримує newBook від CreateBookModal)
   const handleCreateBook = (newBook) => {
     const book = {
       id: newBook.id ?? Date.now().toString(),
-      title: newBook.title,
+      title: newBook.title || "Untitled",
       description: newBook.description || "",
       chapters: Array.isArray(newBook.chapters)
-        ? newBook.chapters.map(t =>
-            typeof t === "string" ? { title: t, content: "" } : t
-          )
+        ? newBook.chapters.map(t => (typeof t === "string" ? { title: t, content: "" } : t))
         : [],
       lastEdited: newBook.lastEdited ?? new Date().toISOString(),
     };
 
     setBooks(prev => {
       const next = [book, ...(prev || [])];
-      try {
-        localStorage.setItem("mybooks", JSON.stringify(next));
-      } catch (e) {
-        console.warn(e);
-      }
+      try { localStorage.setItem("mybooks", JSON.stringify(next)); } catch (e) { console.warn(e); }
       return next;
     });
   };
 
-  // ===============================
-  // ROUTES
-  // ===============================
   return (
     <Routes>
-      <Route path="/" element={
-        <WelcomeScreen
-          onGetStarted={() => navigate("/signup")}
-          onLogin={() => navigate("/login")}
-        />
-      } />
+      <Route path="/" element={<WelcomeScreen onGetStarted={() => navigate("/signup")} onLogin={() => navigate("/login")} />} />
 
-      <Route path="/signup" element={
-        <SignUpScreen
-          onLogin={() => navigate("/login")}
-          onRegisterSuccess={() => navigate("/home")}
-        />
-      } />
+      <Route path="/signup" element={<SignUpScreen onLogin={() => navigate("/login")} onRegisterSuccess={() => navigate("/home")} />} />
 
-      <Route path="/login" element={
-        <LoginScreen
-          onSignUp={() => navigate("/signup")}
-          onLoginSuccess={() => navigate("/home")}
-        />
-      } />
+      <Route path="/login" element={<LoginScreen onSignUp={() => navigate("/signup")} onLoginSuccess={() => navigate("/home")} />} />
 
       <Route path="/home" element={
         <HomeScreen
@@ -90,21 +63,11 @@ export default function App() {
         />
       } />
 
-      <Route path="/mybooks" element={
-        <MyBooks
-          books={books}
-          setBooks={setBooks}
-          onViewBook={(id) => navigate(`/book/${id}`)}
-        />
-      } />
+      <Route path="/mybooks" element={<MyBooks books={books} setBooks={setBooks} onViewBook={(id) => navigate(`/book/${id}`)} />} />
 
-      <Route path="/book/:id" element={
-        <BookDetail books={books} setBooks={setBooks} />
-      } />
+      <Route path="/book/:id" element={<BookDetail books={books} setBooks={setBooks} />} />
 
-      <Route path="/profile" element={
-        <ProfileScreen setScreen={navigate} />
-      } />
+      <Route path="/profile" element={<ProfileScreen setScreen={navigate} />} />
     </Routes>
   );
 }

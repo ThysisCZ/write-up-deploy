@@ -1,24 +1,44 @@
-import HomeIcon from '@mui/icons-material/Home';
-import MenuBookIcon from '@mui/icons-material/MenuBook';
-import PersonIcon from '@mui/icons-material/Person';
+// src/components/generic/PageNavbar.jsx
+import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import HomeIcon from "@mui/icons-material/Home";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+import PersonIcon from "@mui/icons-material/Person";
+import "./page-navbar.css"; // шлях до css (постав вірний)
 
-function PageNavbar(props) {
-    return (
-        <div style={{ width: "min-content", justifyContent: "space-evenly", display: "flex", height: "8vh" }}>
-            <button className='navbar-button navbar-left' style={{ display: "block", width: "12vh", textAlign: "center", fontSize: "14px" }}>
-                <HomeIcon style={{ fontSize: "30px" }} />
-                <div>Home</div>
-            </button>
-            <button className='navbar-button navbar-middle' style={{ display: "block", width: "12vh", textAlign: "center", fontSize: "14px" }}>
-                <MenuBookIcon style={{ fontSize: "30px" }} />
-                <div>My Books</div>
-            </button>
-            <button className='navbar-button navbar-right' style={{ display: "block", width: "12vh", textAlign: "center", fontSize: "14px" }}>
-                <PersonIcon style={{ fontSize: "30px" }} />
-                <div>Profile</div>
-            </button>
-        </div>
-    )
+export default function PageNavbar() {
+  const navigate = useNavigate();
+  const loc = useLocation();
+
+  const nav = (path) => {
+    if (loc.pathname !== path) navigate(path);
+  };
+
+  return (
+    <div className="page-navbar" role="navigation" aria-label="Bottom navigation">
+      <button
+        className={`nav-btn ${loc.pathname === "/home" ? "active" : ""}`}
+        onClick={() => nav("/home")}
+      >
+        <HomeIcon className="nav-icon" />
+        <div className="nav-label">Home</div>
+      </button>
+
+      <button
+        className={`nav-btn ${loc.pathname === "/mybooks" ? "active" : ""}`}
+        onClick={() => nav("/mybooks")}
+      >
+        <MenuBookIcon className="nav-icon" />
+        <div className="nav-label">My Books</div>
+      </button>
+
+      <button
+        className={`nav-btn ${loc.pathname === "/profile" ? "active" : ""}`}
+        onClick={() => nav("/profile")}
+      >
+        <PersonIcon className="nav-icon" />
+        <div className="nav-label">Profile</div>
+      </button>
+    </div>
+  );
 }
-
-export default PageNavbar
