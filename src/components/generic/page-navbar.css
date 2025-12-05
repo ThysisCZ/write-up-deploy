@@ -6,7 +6,8 @@
   left: 50%;
   transform: translateX(-50%);
   bottom: 18px;
-  display: flex;               /* <-- горизонтальне розміщення */
+  display: flex;
+  /* <-- горизонтальне розміщення */
   gap: 12px;
   padding: 10px;
   background: transparent;
@@ -19,11 +20,13 @@
 /* Плитка кнопки */
 .nav-btn {
   display: inline-flex;
-  flex-direction: column;      /* іконка зверху, підпис знизу */
+  flex-direction: column;
+  /* іконка зверху, підпис знизу */
   align-items: center;
   justify-content: center;
   gap: 6px;
-  min-width: 72px;
+  min-width: 81px;
+  max-width: 81px;
   padding: 8px 12px;
   border-radius: 12px;
   background: rgba(18, 45, 63, 0.9);
@@ -37,21 +40,46 @@
 }
 
 /* Іконка і підпис */
-.nav-btn .nav-icon { font-size: 18px; line-height:1; }
-.nav-btn .nav-label { font-size: 12px; margin-top: 2px; }
+.nav-btn .nav-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.nav-btn .nav-label {
+  font-size: 12px;
+  margin-top: 2px;
+}
 
 /* Hover / active */
-.nav-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 26px rgba(6,20,30,0.45); }
+.nav-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 26px rgba(6, 20, 30, 0.45);
+}
+
 .nav-btn.active {
   background: linear-gradient(180deg, #2b4c63, #173241);
-  box-shadow: 0 14px 32px rgba(8,32,50,0.55);
+  box-shadow: 0 14px 32px rgba(8, 32, 50, 0.55);
   transform: translateY(-1px);
 }
 
 /* Менша версія для вузьких екранів */
 @media (max-width: 420px) {
-  .page-navbar { gap: 8px; padding: 8px; bottom: 12px; }
-  .nav-btn { min-width: 64px; padding: 6px 10px; border-radius: 10px; }
-  .nav-btn .nav-icon { font-size: 16px; }
-  .nav-btn .nav-label { font-size: 11px; }
+  .page-navbar {
+    gap: 8px;
+    padding: 8px;
+    bottom: 12px;
+  }
+
+  .nav-btn {
+    padding: 6px 10px;
+    border-radius: 10px;
+  }
+
+  .nav-btn .nav-icon {
+    font-size: 16px;
+  }
+
+  .nav-btn .nav-label {
+    font-size: 11px;
+  }
 }

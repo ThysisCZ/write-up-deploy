@@ -3,11 +3,10 @@ import { useState, useEffect } from 'react';
 import BackArrow from "./generic/BackArrow";
 import PageNavbar from "./generic/PageNavbar";
 import LogoutIcon from '@mui/icons-material/Logout';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import SettingsIcon from '@mui/icons-material/Settings';
+import "../styles/profile.css";
 
 export default function ProfileScreen({ pathname, setScreen }) {
     const [profileCall, setProfileCall] = useState({ state: "inactive" });
@@ -43,16 +42,20 @@ export default function ProfileScreen({ pathname, setScreen }) {
     }
 
     return (
-        <div>
-            <div className="page-header">
-                <div className="header-top-row">
-                    <BackArrow className="header-back" onClick={() => setScreen("/home", -1)} />
-
-                    <div className="header-buttons">
+        <div className="profile-root">
+            <header className="profile-header">
+                <div className="header-left">
+                    <BackArrow onClick={() => setScreen("/home", -1)} />
+                </div>
+                <div className="header-center">
+                    <h1 className="profile-title">Author's profile</h1>
+                </div>
+                <div className="header-right">
+                    <Stack direction="row" spacing={3}>
                         <button className="basic-btn">
                             <SettingsIcon /> Edit
                         </button>
-                        <button className="basic-btn" onClick={handleLogout}>
+                        <button style={{ marginRight: 120 }} className="logout-btn" onClick={handleLogout}>
                             {logoutCall.state === "pending" ? (
                                 <ClipLoader color="var(--color-primary)" size={20} />
                             ) : (
@@ -61,11 +64,9 @@ export default function ProfileScreen({ pathname, setScreen }) {
                                 </>
                             )}
                         </button>
-                    </div>
+                    </Stack>
                 </div>
-
-                <h1 className="page-title">Author's profile</h1>
-            </div>
+            </header>
 
             <div style={{ minHeight: '112vh' }}>
                 <div style={{ position: "absolute", left: "10%", right: "10%" }}>
@@ -76,55 +77,47 @@ export default function ProfileScreen({ pathname, setScreen }) {
                             <div>
                                 <h2>Personal information</h2>
 
-                                <Card variant="outlined">
-                                    <CardContent style={{ display: "flex", justifyContent: "center", color: "white" }} className="card">
-                                        <Stack direction="row" spacing={3} style={{ marginTop: 17 }}>
-                                            <Avatar style={{ height: 100, width: 100, marginTop: 10 }} />
+                                <div style={{ display: "flex", justifyContent: "center" }} className="info-card">
+                                    <Stack direction="row" spacing={3} style={{ marginTop: 17 }}>
+                                        <Avatar style={{ height: 100, width: 100, marginTop: 10 }} />
+                                        <div>
                                             <div>
-                                                <div>
-                                                    Name: {authorName}
-                                                </div>
-                                                <div>
-                                                    Genres:
-                                                    <ul style={{ marginTop: 5 }}>
-                                                        {genres.map(genre =>
-                                                            <li>
-                                                                {genre}
-                                                            </li>
-                                                        )}
-                                                    </ul>
-                                                </div>
+                                                Name: {authorName}
                                             </div>
-                                        </Stack>
-                                    </CardContent>
-                                </Card>
+                                            <div>
+                                                Genres:
+                                                <ul style={{ marginTop: 5 }}>
+                                                    {genres.map(genre =>
+                                                        <li>
+                                                            {genre}
+                                                        </li>
+                                                    )}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </Stack>
+                                </div>
                             </div>
 
                             <div>
                                 <h2>Contact</h2>
-
-                                <Card variant="outlined">
-                                    <CardContent style={{ display: "flex", justifyContent: "left", color: "white", height: 15 }} className="card">
-                                        <Stack direction="row" spacing={2}>
-                                            <h3>Email:</h3>
-                                            <div>
-                                                {email}
-                                            </div>
-                                        </Stack>
-                                    </CardContent>
-                                </Card>
+                                <div className="info-card">
+                                    <Stack direction="row" spacing={2}>
+                                        <h3>Email:</h3>
+                                        <div>
+                                            {email}
+                                        </div>
+                                    </Stack>
+                                </div>
                             </div>
 
                             <div>
                                 <h2>Bio</h2>
-
-                                <Card variant="outlined">
-                                    <CardContent style={{ display: "flex", justifyContent: "left", color: "white", paddingBottom: 15 }} className="card">
-                                        <div>
-                                            {bio}
-                                        </div>
-                                    </CardContent>
-                                </Card>
+                                <div className="info-card">
+                                    <div>
+                                        {bio}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     }
