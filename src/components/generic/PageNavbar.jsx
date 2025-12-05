@@ -6,7 +6,7 @@ import MenuBookIcon from "@mui/icons-material/MenuBook";
 import PersonIcon from "@mui/icons-material/Person";
 import "./page-navbar.css"; // шлях до css (постав вірний)
 
-export default function PageNavbar() {
+export default function PageNavbar(navTo) {
   const navigate = useNavigate();
   const loc = useLocation();
 

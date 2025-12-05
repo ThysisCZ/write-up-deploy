@@ -43,7 +43,8 @@ export default function App() {
       return JSON.parse(localStorage.getItem("mybooks") || "[]");
     } catch {
       return [];
-  }
+    }
+  })
     
   const [screen, setScreen] = useState('welcome'); // welcome | signup | login | home
   // direction: +1 moving forward, -1 moving back (controls slide direction)
@@ -64,7 +65,7 @@ export default function App() {
   const [nextPath, setNextPath] = useState("/")
 
   const navigateTo = useNavigate();
-  function navTo(to_URI, dir) {
+  function navTo(to_URI, dir=1) {
     // While animating away, do not schedule another animation and page navigation
     if (animating) return;
 
@@ -97,7 +98,7 @@ export default function App() {
     if (entering) {
       setEntering(false);
     }
-  });
+  };
 
   useEffect(() => {
     try { localStorage.setItem("mybooks", JSON.stringify(books)); } catch (e) { console.warn(e); }
@@ -169,7 +170,7 @@ export default function App() {
 
           <Route path="/home"
             element={
-              (pathname === "/home" && <motion.div
+              <motion.div
                 animate={animationStateController()}
                 onAnimationComplete={() => handleAnimationFinish()}
 
@@ -182,12 +183,12 @@ export default function App() {
                   onViewMyBooks={() => navTo("mybooks", 1)}
                   books={books}
                   setBooks={setBooks}  />
-              </motion.div>)
+              </motion.div>
             } />
 
           <Route path="/books"
             element={
-              (pathname === "/books" && <motion.div
+              <motion.div
                 animate={animationStateController()}
                 onAnimationComplete={() => handleAnimationFinish()}
 
@@ -195,12 +196,12 @@ export default function App() {
               >
 
                 <CreateBookScreen pathname={pathname} setScreen={navTo} />
-              </motion.div>)
+              </motion.div>
             } />
 
           <Route path="/profile"
             element={
-              (pathname === "/profile" && <motion.div
+               <motion.div
                 animate={animationStateController()}
                 onAnimationComplete={() => handleAnimationFinish()}
 
@@ -208,44 +209,18 @@ export default function App() {
               >
 
                 <ProfileScreen pathname={pathname} setScreen={navTo} />
-              </motion.div>)
+              </motion.div>
             } />
+
+
+        <Route path="/mybooks" element={<MyBooks books={books} setBooks={setBooks} onViewBook={(id) => navTo(`/book/${id}`)} />} />
+
+        <Route path="/book/:id" element={<BookDetail books={books} setBooks={setBooks} />} />
+
         </Routes>
       </AnimatePresence>
     </div>
   );
 
-  /*
-    Additional routes
-    /profile (with user ID query)
-    /book    (with book ID query)
-    /chapter (with book ID and chapter ID query)
-    ...
-  */
-
-
-  // Previous state-based route switching, with animations
-  return (
-    <div style={{ position: "relative", width: "100%", height: "100%", overflowX: "hidden" }}>
-      <AnimatePresence mode="wait" initial={false}>
-        {screen === 'welcome' && (
-          <motion.div
-            key="welcome"
-            custom={direction}
-            variants={pageVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            style={{ width: '100%' }}
-          >
-            <WelcomeScreen onGetStarted={() => goTo('signup')} onLogin={() => goTo('login')} />
-          </motion.div>
-        )}
-      <Route path="/mybooks" element={<MyBooks books={books} setBooks={setBooks} onViewBook={(id) => navigate(`/book/${id}`)} />} />
-
-      <Route path="/book/:id" element={<BookDetail books={books} setBooks={setBooks} />} />
-
-      <Route path="/profile" element={<ProfileScreen setScreen={navigate} />} />
-    </Routes>
-  );
 }
+

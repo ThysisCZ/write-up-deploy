@@ -24,7 +24,7 @@ export default function ProfileScreen({ pathname, setScreen }) {
 
         setTimeout(() => {
             setProfileCall({ state: "success" });
-        }, 2000);
+        }, 100);
     }
 
     // simulate profile loading on component mount
@@ -176,7 +176,7 @@ export default function ProfileScreen({ setScreen = () => {} }) {
 
       <div style={{ display: 'flex', gap: 12 }}>
         <button
-          onClick={() => setScreen('/home')}
+          onClick={() => setScreen('/home', -1)}
           style={{
             padding: '10px 16px',
             borderRadius: 12,
