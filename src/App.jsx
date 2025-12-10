@@ -38,15 +38,18 @@ const pageVariants = {
 
 export default function App() {
   
+
   // GLOBAL BOOK STATE (синхронізація з localStorage)
-  const [books, setBooks] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem("mybooks") || "[]");
-    } catch {
-      return [];
-    }
-  })
-    
+  const [books, setBooks] = useState([])
+
+  const fetchBooks = async () => {
+      const fetchedBooks = await FetchHelper.books.list()
+      console.log(fetchedBooks.response)
+      return fetchedBooks.response
+  }
+
+
+
   const [screen, setScreen] = useState('welcome'); // welcome | signup | login | home
   // direction: +1 moving forward, -1 moving back (controls slide direction)
   const [direction, setDirection] = useState(1);
@@ -106,6 +109,7 @@ export default function App() {
   }, [books]);
 
   // CREATE BOOK helper (отримує newBook від CreateBookModal)
+  /*
   const handleCreateBookOLD = (newBook) => {
     const book = {
       id: newBook.id ?? Date.now().toString(),
@@ -122,7 +126,7 @@ export default function App() {
       try { localStorage.setItem("mybooks", JSON.stringify(next)); } catch (e) { console.warn(e); }
       return next;
     });
-  };
+  };*/
 
   const handleCreateBook = async (newBook) => {
     const response = await FetchHelper.books.create({
@@ -207,6 +211,7 @@ export default function App() {
                   onViewMyBooks={() => navTo("mybooks", 1)}
                   books={books}
                   setBooks={setBooks}  
+                  fetchBooks={fetchBooks}
                   removeLocalSessionData={removeLocalSessionData}
                   />
               </motion.div>
@@ -246,7 +251,7 @@ export default function App() {
     
               style={{ width: '100%' }}
             >
-              <MyBooks books={books} setBooks={setBooks} onViewBook={(id) => navTo(`/book/${id}`)} />
+              <MyBooks books={books} setBooks={setBooks} onViewBook={(id) => navTo(`/book/${id}`)} fetchBooks={fetchBooks}/>
             </motion.div>
           } />
 

@@ -13,6 +13,7 @@ export default function HomeScreen({
   onViewMyBooks,
   books = [],
   setBooks,
+  fetchBooks,
   username = "your username",
   removeLocalSessionData,
 }) {
@@ -27,6 +28,10 @@ export default function HomeScreen({
   const [error, setError] = useState(null);
 
   const loadBooks = async (sourceBooks) => {
+
+    // Fetch books online
+    sourceBooks = await fetchBooks()
+
     setBookListCall({ state: "pending" });
     setError(null);
     try {
@@ -58,10 +63,12 @@ export default function HomeScreen({
       setBookListCall({ state: "error" });
     }
   }
+  
 
   useEffect(() => {
     loadBooks(books);
   }, [books]);
+  
 
   const handleLogout = () => {
     setLogoutCall({ state: "pending" });
@@ -143,11 +150,13 @@ export default function HomeScreen({
                 <div className="recent-item" key={b.id} role="listitem" onClick={() => onViewMyBooks && onViewMyBooks()}>
                   <div className="recent-icon">📗</div>
                   <div className="recent-body">
-                    <div className="recent-title">{b.title}</div>
+                    <div className="recent-title">{b.name}</div>
                     <div className="recent-meta">
+                      <span>{b.genre}</span>
+                      <span> • </span>
                       <span>{Array.isArray(b.chapters) ? b.chapters.length : 0} chapters</span>
                       <span> • </span>
-                      <span>⏱ {b.lastEdited || "—"}</span>
+                      <span>⏱ {b.updatedAt || "—"}</span>
                     </div>
                   </div>
                 </div>

@@ -53,7 +53,7 @@ export default function CreateBookModal({ open, onClose = () => {}, onCreate = (
   };
 
   const handleCreate = () => {
-    const newBook = { id: Date.now().toString(), title: title.trim(), description: desc.trim(), chapters };
+    const newBook = { title: title.trim(), description: desc.trim(), genre: genre.trim(), chapters };
     onCreate(newBook);
     // очистити локально
     setTitle("");

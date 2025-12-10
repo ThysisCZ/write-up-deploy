@@ -5,7 +5,7 @@ import CreateBookModal from "./CreateBookModal";
 import BookModal from "./BookModal";
 import "../styles/mybooks.css";
 
-export default function MyBooks({ books = [], setBooks = () => { }, setScreen = () => { } }) {
+export default function MyBooks({ books = [], setBooks = () => { }, setScreen = () => { }, fetchBooks }) {
   const [list, setList] = useState(() => {
     try {
       const fromLocal = JSON.parse(localStorage.getItem("mybooks") || "[]");
@@ -14,6 +14,17 @@ export default function MyBooks({ books = [], setBooks = () => { }, setScreen = 
       return [];
     }
   });
+
+ 
+
+  const loadBooks = async () => {
+      setList( await fetchBooks() )
+  }
+
+  useEffect(() => {
+    loadBooks();
+  }, []);
+  
 
   useEffect(() => {
     localStorage.setItem("mybooks", JSON.stringify(list));
@@ -106,9 +117,9 @@ export default function MyBooks({ books = [], setBooks = () => { }, setScreen = 
           ) : (
             list.map(b => (
               <div className="book-card" key={b.id}>
-                <div className="book-title">{b.title}</div>
+                <div className="book-title">{b.name}</div>
                 <div className="book-meta">
-                  Chapters: {Array.isArray(b.chapters) ? b.chapters.length : 0} · Last edited: {b.lastEdited ? new Date(b.lastEdited).toLocaleString() : "—"}
+                  Genre: {b.genre} · Chapters: {Array.isArray(b.chapters) ? b.chapters.length : 0} · Last edited: {b.updatedAt ? new Date(b.updatedAt).toLocaleString() : "—"}
                 </div>
 
                 <div className="book-actions">
