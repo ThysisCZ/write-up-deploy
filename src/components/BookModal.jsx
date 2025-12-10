@@ -19,6 +19,7 @@ export default function BookModal({
       return {
         id: "",
         title: "",
+        genre: "",
         description: "",
         chapters: [],
       };
@@ -69,6 +70,12 @@ export default function BookModal({
     const value = e.target.value;
     setDraft((prev) => ({ ...prev, title: value }));
   };
+
+  const handleGenreChange = (e) => {
+    const value = e.target.value;
+    setDraft((prev) => ({ ...prev, genre: value }));
+  };
+
 
   const handleDescChange = (e) => {
     const value = e.target.value;
@@ -187,6 +194,30 @@ export default function BookModal({
             </div>
           </div>
 
+          {/* Genre */}
+          <div style={{ marginBottom: 16 }}>
+            <div
+              style={{
+                fontSize: 14,
+                color: "#98b4c9",
+                marginBottom: 4,
+                fontWeight: 600,
+              }}
+            >
+              Genre
+            </div>
+            <div
+              style={{
+                padding: "10px 12px",
+                borderRadius: 8,
+                background: "rgba(255,255,255,0.02)",
+                border: "1px solid rgba(255,255,255,0.04)",
+              }}
+            >
+              {book.genre || <em>No genre</em>}
+            </div>
+          </div>
+
           {/* Description */}
           <div style={{ marginBottom: 20 }}>
             <div
@@ -301,6 +332,26 @@ export default function BookModal({
             value={draft.title}
             onChange={handleTitleChange}
             placeholder="Book title"
+          />
+        </div>
+
+        {/* GENRE */}
+        <div style={{ marginBottom: 16 }}>
+          <div
+            style={{
+              fontSize: 14,
+              color: "#98b4c9",
+              marginBottom: 4,
+              fontWeight: 600,
+            }}
+          >
+            Genre
+          </div>
+          <input
+            className="bm-chapter-title-input"
+            value={draft.genre}
+            onChange={handleGenreChange}
+            placeholder="Genre"
           />
         </div>
 
