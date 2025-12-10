@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import "../styles/create-book-modal.css";
 
-export default function CreateBookModal({ open, onClose = () => {}, onCreate = () => {} }) {
+export default function CreateBookModal({ open, onClose = () => { }, onCreate = () => { } }) {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [genre, setGenre] = useState("");
@@ -53,7 +53,7 @@ export default function CreateBookModal({ open, onClose = () => {}, onCreate = (
   };
 
   const handleCreate = () => {
-    const newBook = { title: title.trim(), description: desc.trim(), genre: genre.trim(), chapters };
+    const newBook = { name: title.trim(), description: desc.trim(), genre: genre.trim(), chapters };
     onCreate(newBook);
     // очистити локально
     setTitle("");

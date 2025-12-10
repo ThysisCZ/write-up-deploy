@@ -6,8 +6,8 @@ export default function BookModal({
   open = false,
   book = null,
   mode = "view", // "view" | "edit"
-  onClose = () => {},
-  onSave = () => {},
+  onClose = () => { },
+  onSave = () => { },
 }) {
   if (!open || !book) return null;
 
@@ -27,15 +27,17 @@ export default function BookModal({
 
     return {
       id: b.id ?? "",
-      title: b.title ?? "",
+      title: b.title ?? b.name ?? "",
+      name: b.name ?? b.title ?? "",
+      genre: b.genre ?? "",
       description: b.description ?? "",
       chapters: Array.isArray(b.chapters)
         ? b.chapters.map((c, idx) => ({
-            id: c.id ?? `ch-${idx}-${Date.now()}`,
-            title: c.title ?? "",
-            content: c.content ?? "",
-            lastEdited: c.lastEdited ?? null,
-          }))
+          id: c.id ?? `ch-${idx}-${Date.now()}`,
+          title: c.title ?? "",
+          content: c.content ?? "",
+          lastEdited: c.lastEdited ?? null,
+        }))
         : [],
     };
   }
@@ -129,7 +131,8 @@ export default function BookModal({
   const handleSaveClick = () => {
     const updated = {
       ...draft,
-      lastEdited: new Date().toISOString(),
+      name: draft.title,
+      updatedAt: new Date().toISOString(),
     };
     onSave(updated);
   };

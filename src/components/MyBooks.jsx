@@ -15,16 +15,14 @@ export default function MyBooks({ books = [], setBooks = () => { }, setScreen = 
     }
   });
 
- 
-
   const loadBooks = async () => {
-      setList( await fetchBooks() )
+    setList(await fetchBooks())
   }
 
   useEffect(() => {
     loadBooks();
   }, []);
-  
+
 
   useEffect(() => {
     localStorage.setItem("mybooks", JSON.stringify(list));
@@ -43,6 +41,7 @@ export default function MyBooks({ books = [], setBooks = () => { }, setScreen = 
     setOpenBook(book);
     setModalMode("view");
   };
+
   const openEdit = (book) => {
     setOpenBook(book);
     setModalMode("edit");
@@ -51,10 +50,13 @@ export default function MyBooks({ books = [], setBooks = () => { }, setScreen = 
   const handleCreate = (newBook) => {
     const normalized = {
       ...newBook,
+      title: newBook.title ?? newBook.name,
+      name: newBook.name ?? newBook.title,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
       chapters: Array.isArray(newBook.chapters)
         ? newBook.chapters.map(t => (typeof t === 'string' ? { title: t, content: "" } : t))
         : [],
-      lastEdited: newBook.lastEdited ?? new Date().toISOString(),
       id: newBook.id ?? Date.now().toString(),
     };
 
@@ -81,7 +83,7 @@ export default function MyBooks({ books = [], setBooks = () => { }, setScreen = 
   // --- NEW: delete handler ---
   const handleDelete = (id) => {
     const book = list.find(b => b.id === id);
-    const ok = window.confirm(`Delete book "${book?.title ?? 'Untitled'}"? This is irreversible.`);
+    const ok = window.confirm(`Delete book "${book?.title ?? book?.name ?? 'Untitled'}"? This is irreversible.`);
     if (!ok) return;
 
     setList(prev => {
