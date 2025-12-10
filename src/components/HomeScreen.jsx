@@ -14,6 +14,7 @@ export default function HomeScreen({
   books = [],
   setBooks,
   username = "your username",
+  removeLocalSessionData,
 }) {
   const [bookListCall, setBookListCall] = useState({ state: "inactive" });
   const [logoutCall, setLogoutCall] = useState({ state: "inactive" });
@@ -67,6 +68,7 @@ export default function HomeScreen({
     setTimeout(() => {
       setLogoutCall({ state: "success" });
       if (setScreen) setScreen("/login", -1);
+      removeLocalSessionData();
     }, 700);
   };
 
@@ -74,7 +76,7 @@ export default function HomeScreen({
     <div className="home-root">
       <header className="home-header">
         <div className="header-left">
-          <BackArrow onClick={() => setScreen && setScreen("/")} />
+          <BackArrow onClick={() => setScreen && setScreen("/login", -1)} />
         </div>
         <div className="header-center">
           <h1 className="home-title">Welcome back, {localStorage.getItem("username")}</h1>

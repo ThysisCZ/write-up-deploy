@@ -133,6 +133,10 @@ export default function App() {
     console.log(response)
   }
 
+  const removeLocalSessionData = () => {
+    localStorage.removeItem("accessToken")
+    localStorage.removeItem("refreshToken")
+  }
 
   return (
     <div style={{ position: "relative", width: "100%", height: "100%", overflowX: "hidden" }}>
@@ -148,7 +152,7 @@ export default function App() {
 
                 style={{ width: '100%' }}
               >
-                <WelcomeScreen onGetStarted={() => navTo('/signup', 1)} onLogin={() => navTo('/login', 1)} />
+                <WelcomeScreen onGetStarted={() => navTo('/signup', 1)} onLogin={() => navTo('/login', 1)} navToInstantly={navigateTo}/>
               </motion.div>
             } />
 
@@ -193,7 +197,9 @@ export default function App() {
                   onCreateBook={handleCreateBook} 
                   onViewMyBooks={() => navTo("mybooks", 1)}
                   books={books}
-                  setBooks={setBooks}  />
+                  setBooks={setBooks}  
+                  removeLocalSessionData={removeLocalSessionData}
+                  />
               </motion.div>
             } />
 
