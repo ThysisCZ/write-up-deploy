@@ -1,6 +1,7 @@
 // src/components/BookModal.jsx
 import React, { useEffect, useState } from "react";
 import "../styles/book-modal.css";
+import FetchHelper from "../fetchHelper";
 
 export default function BookModal({
   open = false,
@@ -140,12 +141,21 @@ export default function BookModal({
     setEditExpandedId((prev) => (prev === chapterId ? null : prev));
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
     const updated = {
       ...draft,
       name: draft.name,
       updatedAt: new Date().toISOString(),
     };
+
+    const response = await FetchHelper.books.edit( {
+      name: draft.name,
+      genre: draft.genre
+    }, draft.id)
+
+    console.log("EDIT BOOK RESPONSE")
+    console.log(response)
+
     onSave(updated);
   };
 

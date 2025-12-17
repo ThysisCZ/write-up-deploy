@@ -144,7 +144,7 @@ export default function App() {
 
   const handleCreateBook = async (newBook) => {
     const response = await FetchHelper.books.create({
-      name: newBook.title || "Untitled",
+      name: newBook.name || newBook.title || "Untitled",
       genre: newBook.genre || "No Genre",
       description: newBook.description || ""
     })
@@ -242,6 +242,7 @@ export default function App() {
                 <MyBooks 
                   books={books}
                   setBooks={setBooks}
+                  handleCreateBook={handleCreateBook}
                   onViewChapter={(id) => navTo(`/chapter/${id}`, 1)}
                   fetchBooks={fetchBooks}
                   fetchClientBooks={fetchClientBooks} />

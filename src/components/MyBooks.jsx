@@ -4,12 +4,13 @@ import PageNavbar from "./generic/PageNavbar";
 import CreateBookModal from "./CreateBookModal";
 import BookModal from "./BookModal";
 import "../styles/mybooks.css";
+import FetchHelper from "../fetchHelper";
 
 export default function MyBooks({
-  books = [],
   setBooks = () => { },
   setScreen = () => { },
   onViewChapter,
+  handleCreateBook,
   fetchBooks,
   fetchClientBooks }) {
   const [list, setList] = useState(() => {
@@ -20,6 +21,8 @@ export default function MyBooks({
       return [];
     }
   });
+
+  const books = []
 
   const loadBooks = async () => {
     setList(await fetchClientBooks())
@@ -53,7 +56,7 @@ export default function MyBooks({
     setModalMode("edit");
   };
 
-  const handleCreate = (newBook) => {
+  const handleCreate = async (newBook) => {
     const normalized = {
       ...newBook,
       name: newBook.name,
@@ -75,6 +78,10 @@ export default function MyBooks({
       return next;
     });
 
+    await handleCreateBook(normalized);
+
+    loadBooks();
+
     setCreateOpen(false);
 
     console.log(books)
@@ -91,10 +98,15 @@ export default function MyBooks({
   };
 
   // --- NEW: delete handler ---
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     const book = list.find(b => b.id === id);
     const ok = window.confirm(`Delete book "${book?.name ?? 'Untitled'}"? This is irreversible.`);
     if (!ok) return;
+
+    const response = await FetchHelper.books.delete(id);
+    console.log(response)
+    if (!response.ok) return;
+    if (response.ok) loadBooks();
 
     setList(prev => {
       const next = prev.filter(b => b.id !== id);

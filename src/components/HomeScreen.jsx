@@ -41,6 +41,7 @@ export default function HomeScreen({
     const loadBooks = async (sourceBooks) => {
 
         // Fetch books online
+        sourceBooks = [];
         sourceBooks = await fetchClientBooks()
         
 
@@ -49,8 +50,9 @@ export default function HomeScreen({
         setBookListCall({ state: "pending" });
         setError(null);
         try {
-            await new Promise((r) => setTimeout(r, 200));
-            let sb = Array.isArray(sourceBooks) && sourceBooks.length ? sourceBooks : null;
+            //await new Promise((r) => setTimeout(r, 200));
+            let sb = Array.isArray(sourceBooks) && sourceBooks.length ? sourceBooks : [];
+            /*
             if (!sb) {
                 try {
                     const raw = localStorage.getItem("mybooks");
@@ -59,6 +61,10 @@ export default function HomeScreen({
                     sb = [];
                 }
             }
+            */
+
+            sb = sb.sort( (a,b) => { return new Date(b.updatedAt) - new Date(a.updatedAt) } )
+
             const recent = Array.isArray(sb) ? sb.slice(0, 3) : [];
             const booksCount = Array.isArray(sb) ? sb.length : 0;
             const chaptersCount = Array.isArray(sb)
@@ -194,8 +200,9 @@ export default function HomeScreen({
                     <CreateBookModal
                         open={createOpen}
                         onClose={() => setCreateOpen(false)}
-                        onCreate={(newBook) => {
-                            if (onCreateBook) onCreateBook(newBook);
+                        onCreate={async (newBook) => {
+                            if (onCreateBook) await onCreateBook(newBook);
+                            loadBooks();
                             setCreateOpen(false);
                         }}
                     />

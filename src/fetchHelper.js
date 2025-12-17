@@ -23,12 +23,27 @@ async function Call(baseUri, useCase, dtoIn, method, token = undefined) {
                 }
             );
         }
+        let data =  {}
+        if (response) {
+            try {
+                data = await response.json();
+            } catch (e) {}
+        }
 
-        const data = await response.json();
-
+        if ( data.code == "InvalidToken" ) {
+            const refreshTokenResult = await Call( baseUri, "user/token/refresh", {refreshToken: localStorage.getItem("refreshToken")}, "get" )
+            
+            if (refreshTokenResult.ok) {
+                localStorage.setItem("accessToken",refreshTokenResult.response.accessToken)
+            }else{
+                localStorage.removeItem("refreshToken")
+                localStorage.removeItem("accessToken")
+            }
+        }
 
         return { ok: response.ok, status: response.status, response: data };
     } catch (e) {
+        console.log(e)
         return { ok: false, status: "error" }
     }
 
@@ -51,7 +66,7 @@ const FetchHelper = {
         get: async (dtoIn, bookId) => Call(baseUri, `books/${bookId}`, dtoIn, "get"),
         create: async (dtoIn) => Call(baseUri, "books", dtoIn, "post"),
         edit: async (dtoIn, bookId) => Call(baseUri, `books/${bookId}`, dtoIn, "patch"),
-        delete: async (dtoIn, bookId) => Call(baseUri, `books/${bookId}`, dtoIn, "delete"),
+        delete: async (bookId) => Call(baseUri, `books/${bookId}`, undefined, "delete"),
 
         chapters: {
             create: async (dtoIn, bookId) => Call(baseUri, `books/${bookId}/chapters`, dtoIn, "post"),
