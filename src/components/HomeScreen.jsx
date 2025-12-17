@@ -9,6 +9,7 @@ import "../styles/mybooks.css";
 import CreateBookModal from "./CreateBookModal";
 import Stack from "@mui/material/Stack";
 import BookModal from "./BookModal";
+import FetchHelper from "../fetchHelper";
 
 export default function HomeScreen({
     setScreen,
@@ -18,6 +19,7 @@ export default function HomeScreen({
     books = [],
     setBooks,
     fetchBooks,
+    fetchClientBooks,
     username = "your username",
     removeLocalSessionData,
 }) {
@@ -39,7 +41,9 @@ export default function HomeScreen({
     const loadBooks = async (sourceBooks) => {
 
         // Fetch books online
-        sourceBooks = await fetchBooks()
+        sourceBooks = await fetchClientBooks()
+        
+
         setBookList(sourceBooks);
 
         setBookListCall({ state: "pending" });

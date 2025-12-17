@@ -10,7 +10,8 @@ export default function MyBooks({
   setBooks = () => { },
   setScreen = () => { },
   onViewChapter,
-  fetchBooks }) {
+  fetchBooks,
+  fetchClientBooks }) {
   const [list, setList] = useState(() => {
     try {
       const fromLocal = JSON.parse(localStorage.getItem("mybooks") || "[]");
@@ -21,7 +22,7 @@ export default function MyBooks({
   });
 
   const loadBooks = async () => {
-    setList(await fetchBooks())
+    setList(await fetchClientBooks())
   }
 
   useEffect(() => {

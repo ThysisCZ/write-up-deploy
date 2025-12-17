@@ -14,6 +14,12 @@ export default function PageNavbar(navTo) {
     if (loc.pathname !== path) navigate(path);
   };
 
+  const authorId = localStorage.getItem("authorId")
+
+  if (authorId == "null") {
+    return <></>
+  }
+
   return (
     <>
       <div className="page-navbar" role="navigation" aria-label="Bottom navigation">

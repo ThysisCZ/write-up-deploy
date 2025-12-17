@@ -20,7 +20,6 @@ export default function SignUpScreen({ onLogin = () => { }, onRegisterSuccess = 
     }
   );
 
-  const password_re = new RegExp("^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\sA-Za-z0-9])(?!.*\s).*$");
 
   const handleRegister = async () => {
     // TODO: when backend ready -> fetch('/auth/login', {method:'POST', body: JSON.stringify({email,password})})
@@ -29,16 +28,25 @@ export default function SignUpScreen({ onLogin = () => { }, onRegisterSuccess = 
     var newValidationState = {
       username:"valid",
       email:"valid",
-      password:"valid",
+      password:[],
       overall:"valid"
     }
 
     if ( !username ) { isValid = false; newValidationState.username="A username is required"; }
     if ( !email ) { isValid = false; newValidationState.email="An email is required"; }
 
-    if ( !password_re.test(password) ) { isValid=false; newValidationState.password="Password must be at least 10 characters long and include an uppercase letter, a lowercase letter, a number, and a special character. Spaces are not allowed. (dev: abcdefghijkL+1)" }
+    if ( password.length < 10 ) { isValid=false; newValidationState.password.push("• Password must be at least 10 characters long") }
+    if ( password.toUpperCase() == password ) { isValid=false; newValidationState.password.push("• Password must include lowercase characters") }
+    if ( password.toLowerCase() == password ) { isValid=false; newValidationState.password.push("• Password must include uppercase characters") }
+
+    var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+
+    if ( !format.test(password) ) { isValid=false; newValidationState.password.push("• Password must include a special character") }
+    
+    
     if ( !password ) { isValid = false; newValidationState.password="A password is required"; }
 
+    if (isValid) { newValidationState.password="valid"; }
     
     if (isValid) {
         // Call backend to register user
@@ -49,6 +57,11 @@ export default function SignUpScreen({ onLogin = () => { }, onRegisterSuccess = 
             password: password
           }
         )
+
+        if ( !result.ok ) {
+            newValidationState.overall = result.response.message;
+        }
+
         // If request is succesful
         if ( result.ok ) {
           const response = result.response;
@@ -62,6 +75,7 @@ export default function SignUpScreen({ onLogin = () => { }, onRegisterSuccess = 
                   password: password
                 })
                 
+                console.log("Result")
                 console.log(loginResult)
                 if (loginResult.response.status === "error"){
                   newValidationState.overall = response.message;
@@ -69,6 +83,7 @@ export default function SignUpScreen({ onLogin = () => { }, onRegisterSuccess = 
                   await loginLocal(loginResult.response)
                   onRegisterSuccess();
                 }
+
               } else {
                 // Wants to be an author, log in, create author profile, and refresh access token
                 const loginResult = await FetchHelper.user.login({
@@ -108,7 +123,7 @@ export default function SignUpScreen({ onLogin = () => { }, onRegisterSuccess = 
           }
 
         }else{
-          newValidationState.overall = "Something went wrong...";
+          if (newValidationState.overall=="valid") newValidationState.overall = "Something went wrong...";
         }
     }else{
         //invalid
@@ -131,7 +146,7 @@ export default function SignUpScreen({ onLogin = () => { }, onRegisterSuccess = 
         <div className="error-message">{validationState.email != "valid" ? validationState.email : ""}</div>
 
         <input className="input" type="password" placeholder="Password" value={password} onChange={ (e) => setPassword(e.target.value) }/>
-        <div className="error-message">{validationState.password != "valid" ? validationState.password : ""}</div>
+        <div className="error-message">{validationState.password != "valid" ? validationState.password.map( (e)=> <div>{e}</div> ) : ""}</div>
 
         <div className="checkbox-row" onClick={() => setIsAuthor(!isAuthor)} style={{ cursor: 'pointer' }}>
           <div className={`checkbox ${isAuthor ? 'checked' : ''}`}>{isAuthor && <div className="tick" />}</div>

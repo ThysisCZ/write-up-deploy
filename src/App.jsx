@@ -46,6 +46,16 @@ export default function App() {
     console.log(fetchedBooks.response)
     return fetchedBooks.response
   }
+  const fetchClientBooks = async () => {
+    const clientAuthorId = localStorage.getItem("authorId");
+    if (clientAuthorId == "null") {
+      return [];
+    } else {
+      const fetchedBooks = await FetchHelper.books.list({authorId:clientAuthorId})
+      console.log(fetchedBooks.response)
+      return fetchedBooks.response
+    }
+  }
 
   // Load books into global state once
   useEffect(() => {
@@ -215,6 +225,7 @@ export default function App() {
                   books={books}
                   setBooks={setBooks}
                   fetchBooks={fetchBooks}
+                  fetchClientBooks={fetchClientBooks}
                   removeLocalSessionData={removeLocalSessionData}
                 />
               </motion.div>
@@ -228,7 +239,12 @@ export default function App() {
 
                 style={{ width: '100%' }}
               >
-                <MyBooks books={books} setBooks={setBooks} onViewChapter={(id) => navTo(`/chapter/${id}`, 1)} fetchBooks={fetchBooks} />
+                <MyBooks 
+                  books={books}
+                  setBooks={setBooks}
+                  onViewChapter={(id) => navTo(`/chapter/${id}`, 1)}
+                  fetchBooks={fetchBooks}
+                  fetchClientBooks={fetchClientBooks} />
               </motion.div>
             } />
 
