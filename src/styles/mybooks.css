@@ -88,6 +88,12 @@
   color: var(--muted);
 }
 
+.book-tiny {
+  margin-top: 18px;
+  font-style: italic;
+  color: var(--muted);
+}
+
 .book-actions {
   display:flex;
   gap: 16px;

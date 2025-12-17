@@ -156,6 +156,7 @@ export default function MyBooks({
           books={list}
           onView={openView}
           onEdit={openEdit}
+          search={search}
           onDelete={handleDelete}
         />
       </main>

@@ -1,4 +1,4 @@
-export default function BookList({ books, onView, onEdit, onDelete }) {
+export default function BookList({ books, onView, onEdit, onDelete, search }) {
   if (books.length === 0) {
     return <div className="no-books">No books found.</div>;
   }
@@ -9,6 +9,9 @@ export default function BookList({ books, onView, onEdit, onDelete }) {
             Chapters: {Array.isArray(b.chapters) ? b.chapters.length : 0}
           </div>*/
 
+  books = books.filter(b =>
+    b.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="books-list">
@@ -23,7 +26,7 @@ export default function BookList({ books, onView, onEdit, onDelete }) {
             <button className="btn-delete" onClick={() => onDelete(b.id)}>Delete</button>
           </div>
           
-          <div className="book-meta">Last Edited: {b.updatedAt}</div>
+          <div className="book-tiny">Last Edited: {b.updatedAt}</div>
         </div>
       ))}
     </div>

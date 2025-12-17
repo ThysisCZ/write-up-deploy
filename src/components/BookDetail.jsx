@@ -13,7 +13,7 @@ function SimpleChapterModal({ chapter, onClose }) {
   return (
     <div className="chapter-modal-backdrop">
       <div className="chapter-modal">
-        <h2>{chapter.title}</h2>
+        <h2>{chapter.name}</h2>
         <div className="chapter-modal-content">
           {chapter.content || <em>No content</em>}
         </div>
@@ -109,7 +109,6 @@ export default function BookDetail({
       </div>
       :
       <div className="book-detail-root">
-        <BackArrow onClick={() => setScreen("/mybooks",-1)}>Back</BackArrow>
         <h1 className="book-title">{book.name}</h1>
         <p className="book-desc">{book.description}</p>
 
@@ -163,7 +162,7 @@ export default function BookDetail({
 
                 {/* У режимі перегляду – НЕ показуємо контент взагалі, тільки заголовок.
                     У режимі редагування можемо залишити короткий preview або теж сховати. */}
-                {!canEdit ? <></> :
+                
                   <div className="chapter-content-preview">
                     {c.content ? (
                       c.content.length > 180
@@ -173,7 +172,7 @@ export default function BookDetail({
                       <em>No content</em>
                     )}
                   </div>
-                }
+                
               </div>
             ))
           ) : (

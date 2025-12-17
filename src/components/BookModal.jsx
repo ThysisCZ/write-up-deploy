@@ -69,7 +69,7 @@ export default function BookModal({
   // loader
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect( async () => {
+  useEffect( () => {
     setIsLoading(true);
 
     const timer = setTimeout( async () => {
@@ -492,7 +492,7 @@ export default function BookModal({
             })}
           </div>
         )}
-          
+
         <button
           className="bm-btn bm-add"
           type="button"
