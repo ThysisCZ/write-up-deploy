@@ -104,13 +104,15 @@ export default function SignUpScreen({ onLogin = () => { }, onRegisterSuccess = 
                         email: loginResponse.email,
                         username: loginResponse.username
                   },loginResponse.accessToken)
-
+                  
                   if (createProfileResult.ok) {
+                    
+                    await localStorage.setItem("authorId", createProfileResult.response.id)
                     // Created profile, refresh user token in the localStorage, and then move to home page
                     const refreshTokenResult = await FetchHelper.user.refresh({}, loginResponse.refreshToken)
                     console.log(refreshTokenResult)
                     if (refreshTokenResult.ok) {
-                      localStorage.setItem("accessToken",refreshTokenResult.response.accessToken)
+                      await localStorage.setItem("accessToken",refreshTokenResult.response.accessToken)
                       onRegisterSuccess()
                     }
                   }

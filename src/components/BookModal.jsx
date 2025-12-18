@@ -414,24 +414,8 @@ export default function BookModal({
           />
         </div>
 
-
-        <div className="bm-actions">
-          <button className="bm-btn bm-ghost" onClick={onClose}>
-            Close
-          </button>
-          <button className="bm-btn bm-primary" onClick={handleSaveClick}>
-            Save changes
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-
-
         {/* CHAPTERS */}
-        /*
+        
         <h3 style={{ margin: "0 0 10px 0", color: "#e6eef0" }}>Chapters</h3>
 
         {chapters.length === 0 ? (
@@ -502,5 +486,22 @@ export default function BookModal({
         >
           + Add chapter
         </button>
-*/
+
+
+        <div className="bm-actions">
+          <button className="bm-btn bm-ghost" onClick={onClose}>
+            Close
+          </button>
+          <button className="bm-btn bm-primary" onClick={handleSaveClick}>
+            Save changes
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+
+
 

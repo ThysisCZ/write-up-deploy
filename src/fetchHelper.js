@@ -31,7 +31,7 @@ async function Call(baseUri, useCase, dtoIn, method, token = undefined) {
         }
 
         //If token is invalid, try and refresh
-        if ( data.code == "InvalidToken" ) {
+        if ( false && data.code == "InvalidToken" ) {
             const refreshToken = localStorage.getItem("refreshToken");
             if (refreshToken && refreshToken !== "null") {
                 console.log(refreshToken)
