@@ -31,6 +31,17 @@ async function Call(baseUri, useCase, dtoIn, method, token = undefined) {
         }
 
         //
+        if ( false && data.code == "InvalidToken" ) {
+            const refreshToken = localStorage.getItem("refreshToken");
+            if (refreshToken && refreshToken !== "null") {
+                console.log(refreshToken)
+                const refreshTokenResult = await Call( baseUri, "user/token/refresh", undefined, "get", refreshToken )
+                if (refreshTokenResult.ok) {
+                    console.log(refreshTokenResult.response.accessToken)
+                    localStorage.setItem("accessToken", refreshTokenResult.response.accessToken)
+                }
+            }
+        }
 
         return { ok: response.ok, status: response.status, response: data };
     } catch (e) {
