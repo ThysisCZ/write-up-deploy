@@ -30,18 +30,6 @@ async function Call(baseUri, useCase, dtoIn, method, token = undefined) {
             } catch (e) {}
         }
 
-        //If token is invalid, try and refresh
-        if ( false && data.code == "InvalidToken" ) {
-            const refreshToken = localStorage.getItem("refreshToken");
-            if (refreshToken && refreshToken !== "null") {
-                console.log(refreshToken)
-                const refreshTokenResult = await Call( baseUri, "user/token/refresh", undefined, "get", refreshToken )
-                if (refreshTokenResult.ok) {
-                    console.log(refreshTokenResult.response.accessToken)
-                    localStorage.setItem("accessToken", refreshTokenResult.response.accessToken)
-                }
-            }
-        }
         //
 
         return { ok: response.ok, status: response.status, response: data };
@@ -52,8 +40,8 @@ async function Call(baseUri, useCase, dtoIn, method, token = undefined) {
 
 }
 
-
-const baseUri = "http://46.36.39.135:3000/api/v1";
+///TODO: replace za produkční url nebo to načítejte idalně z .env 💋
+const baseUri = "https://test-be.write-up.eu/api/v1";
 
 
 const FetchHelper = {
