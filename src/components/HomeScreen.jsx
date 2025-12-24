@@ -10,6 +10,7 @@ import CreateBookModal from "./CreateBookModal";
 import Stack from "@mui/material/Stack";
 import BookModal from "./BookModal";
 import FetchHelper from "../fetchHelper";
+import SearchField from "./SearchField";
 
 export default function HomeScreen({
     setScreen,
@@ -35,8 +36,9 @@ export default function HomeScreen({
     const [bookList, setBookList] = useState([]);
     const [openBook, setOpenBook] = useState(null);
     const [modalMode, setModalMode] = useState("view");
+    const [search, setSearch] = useState("");
 
-    const isAuthor = localStorage.getItem("authorId") !== "null" && localStorage.getItem("authorId") !== null;
+    const isAuthor = localStorage.getItem("authorId") !== "null";
 
     const loadBooks = async (sourceBooks) => {
 
@@ -112,6 +114,16 @@ export default function HomeScreen({
             removeLocalSessionData();
         }, 700);
     };
+
+    const booksArray = Array.isArray(bookList) ? bookList : [];
+
+    if (booksArray.length === 0) {
+        return <div className="no-books">No books found.</div>;
+    }
+
+    const filteredBooks = booksArray.filter(b =>
+        b.name && b.name.toLowerCase().includes(search.toLowerCase())
+    );
 
     return (
         <div className="home-root">
@@ -217,9 +229,11 @@ export default function HomeScreen({
                     />
                 </> : <div className="mybooks-root">
                     <main className="mybooks-main">
+                        <SearchField value={search} onChange={setSearch} />
+
                         <div className="books-list">
                             {
-                                bookList.map(b => (
+                                filteredBooks.map(b => (
                                     <div className="book-card" key={b.id}>
                                         <div className="book-title">{b.name}</div>
                                         <div className="book-meta">
@@ -232,7 +246,7 @@ export default function HomeScreen({
                                         </div>
 
                                         <div className="book-actions">
-                                            <button className="btn btn-view" onClick={() => openView(b)}>View</button>
+                                            <button className="btn btn-view" onClick={() => setScreen(`book/${b.id}`, 1)}>View</button>
                                         </div>
                                     </div>
                                 ))}

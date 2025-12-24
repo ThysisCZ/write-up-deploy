@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import BackArrow from "./generic/BackArrow";
 import FetchHelper from "../fetchHelper";
 import Avatar from "@mui/material/Avatar";
+import TextField from "@mui/material/TextField";
 import "../styles/chapter.css";
 
 function Chapter({ setScreen }) {
@@ -14,23 +15,40 @@ function Chapter({ setScreen }) {
     const bookId = params.bookId;
     const chapterId = params.chapterId;
 
-    const commentList = [
+    const isAuthor = localStorage.getItem("authorId") !== "null";
+
+    const [comments, setComments] = useState([
         {
             id: "1",
             username: "Jirka",
-            content: "Super kapitola bro 🔥"
+            text: "Super kapitola bro 🔥"
         },
         {
             id: "2",
             username: "Oleksandr",
-            content: "Je to top 👍"
+            text: "Je to top 👍"
         },
         {
             id: "3",
             username: "Honza",
-            content: "Jen tak dál 🙌"
+            text: "Jen tak dál 🙌"
         }
-    ]
+    ]);
+
+    const [newCommentText, setNewCommentText] = useState("");
+
+    const handleAddComment = () => {
+        const username = localStorage.getItem("username");
+
+        const newComment = {
+            id: Date.now(),
+            username,
+            text: newCommentText.trim()
+        };
+
+        setComments(prev => [newComment, ...prev]);
+        setNewCommentText("");
+    };
 
     const loadChapter = async () => {
         setChapterCall("pending");
@@ -145,12 +163,33 @@ function Chapter({ setScreen }) {
                         {chapterData.content}
                     </div>
                     <div className="comment-header">
-                        <h2>
-                            Comments
-                        </h2>
+                        <h2>Comments</h2>
+
+                        {!isAuthor && (
+                            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                                <TextField
+                                    multiline
+                                    fullWidth
+                                    variant="filled"
+                                    label="Write a comment"
+                                    maxRows={4}
+                                    value={newCommentText}
+                                    onChange={(e) => setNewCommentText(e.target.value)}
+                                    style={{ backgroundColor: "white" }}
+                                />
+
+                                <button
+                                    className="ds-btn ds-btn-primary"
+                                    onClick={handleAddComment}
+                                    style={{ alignSelf: "flex-end" }}
+                                >
+                                    Post comment
+                                </button>
+                            </div>
+                        )}
                     </div>
                     <div style={{ marginBottom: 30 }}>
-                        {commentList.map(comment =>
+                        {comments.map(comment =>
                             <div className="comment" key={comment.id}>
                                 <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 10 }}>
                                     <Avatar sx={{ bgcolor: "white", color: "black" }}>{comment.username.slice(0, 1)}</Avatar>
@@ -159,7 +198,7 @@ function Chapter({ setScreen }) {
                                     </div>
                                 </div>
                                 <div>
-                                    {comment.content}
+                                    {comment.text}
                                 </div>
                             </div>
                         )}

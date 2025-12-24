@@ -65,10 +65,18 @@
     padding: 12px;
     border-radius: 8px;
     margin-bottom: 10px;
-    height: 80px;
     display: flex;
     flex-direction: column;
     gap: 8px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+.comment>div:last-child {
+    /* preserve line breaks */
+    white-space: pre-wrap;
+    word-break: break-word;
 }
 
 @media (max-width: 768px) {

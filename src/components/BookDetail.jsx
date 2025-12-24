@@ -170,12 +170,13 @@ export default function BookDetail({
     <div>
       {!book && detailCall !== "pending" ?
         <div style={{ padding: 20, color: "white" }}>
+          <BackArrow style={{ marginLeft: -30 }} onClick={() => setScreen("/home", -1)}>Back</BackArrow>
           <h1>Book not found</h1>
-          <BackArrow onClick={() => setScreen("/mybooks", -1)}>Back</BackArrow>
           <PageNavbar />
         </div>
         :
         <div className="book-detail-root">
+          <BackArrow style={{ marginLeft: -20, marginBottom: 20, width: 80 }} onClick={() => setScreen("/home", -1)}>Back</BackArrow>
           <h1 className="book-title">{book?.name}</h1>
           <p className="book-desc">{book?.description}</p>
 
