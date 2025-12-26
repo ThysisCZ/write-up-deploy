@@ -30,7 +30,6 @@ async function Call(baseUri, useCase, dtoIn, method, token = undefined) {
             } catch (e) { }
         }
 
-        //
         if (data.code == "InvalidToken") {
             const refreshToken = localStorage.getItem("refreshToken");
             if (refreshToken && refreshToken !== "null") {
