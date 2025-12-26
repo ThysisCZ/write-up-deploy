@@ -28,3 +28,5 @@ Pokud je spuštění úspěšné, aplikace poběží na adrese http://localhost:
   ➜  Network: use --host to expose
   ➜  press h + enter to show help
 ```
+
+Frontend je nasazen na adrese https://test-fe-write-up.vercel.app/
