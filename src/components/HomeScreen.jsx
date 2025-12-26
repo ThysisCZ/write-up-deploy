@@ -117,10 +117,6 @@ export default function HomeScreen({
 
     const booksArray = Array.isArray(bookList) ? bookList : [];
 
-    if (booksArray.length === 0) {
-        return <div className="no-books">No books found.</div>;
-    }
-
     const filteredBooks = booksArray.filter(b =>
         b.name && b.name.toLowerCase().includes(search.toLowerCase())
     );
