@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageNavbar from "./generic/PageNavbar.jsx";
 import { getProfile, updateProfile } from "../services/profileService.jsx";
+import BackArrow from "./generic/BackArrow.jsx";
 import "../styles/profile.css";
 
 function validate(form) {
@@ -128,7 +129,9 @@ export default function ProfileScreen() {
     return (
       <div className="page">
         <div className="top-bar">
-          <button className="back-btn" onClick={() => navigate("/home")}>Back</button>
+          <div className="back-btn">
+            <BackArrow onClick={() => navigate("/home")}>Back</BackArrow>
+          </div>
           <div style={{ opacity: 0.65, fontWeight: 800 }}>Profile</div>
         </div>
         <div className="title">Author's profile</div>
@@ -143,7 +146,9 @@ export default function ProfileScreen() {
     return (
       <div className="page">
         <div className="top-bar">
-          <button className="back-btn" onClick={() => navigate("/home")}>Back</button>
+          <div className="back-btn">
+            <BackArrow onClick={() => navigate("/home")}>Back</BackArrow>
+          </div>
           <div style={{ opacity: 0.65, fontWeight: 800 }}>Profile</div>
         </div>
 
@@ -194,12 +199,12 @@ export default function ProfileScreen() {
   return (
     <div className="page">
       <div className="top-bar">
-        <button className="back-btn" style={saving ? {
-          opacity: 0.65,
-          cursor: "not-allowed"
-        } : {}} onClick={cancelEdit} disabled={saving}>
-          Back
-        </button>
+        <div className="back-btn">
+          <BackArrow style={saving ? {
+            opacity: 0.65,
+            cursor: "not-allowed"
+          } : {}} onClick={cancelEdit} disabled={saving}>Back</BackArrow>
+        </div>
         <div style={{ opacity: 0.65, fontWeight: 800 }}>Edit</div>
       </div>
 
