@@ -2,6 +2,8 @@ import { React, useState } from 'react';
 import LogoCard from './LogoCard';
 import { ClipLoader } from "react-spinners";
 import FetchHelper from '../fetchHelper';
+import Icon from '@mui/material/Icon';
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 export default function LoginScreen({ onSignUp = () => { }, onLoginSuccess = () => { }, loginLocal }) {
   const [loginCall, setLoginCall] = useState({ state: "inactive" });
@@ -16,6 +18,8 @@ export default function LoginScreen({ onSignUp = () => { }, onLoginSuccess = () 
       overall: "valid"
     }
   );
+
+  const [visibility, setVisibility] = useState(false);
 
   const handleLogin = async () => {
     // TODO: when backend ready -> fetch('/auth/login', {method:'POST', body: JSON.stringify({email,password})})
@@ -78,7 +82,13 @@ export default function LoginScreen({ onSignUp = () => { }, onLoginSuccess = () 
         <input className="input" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
         <div className="error-message">{validationState.email != "valid" ? validationState.email : ""}</div>
 
-        <input className="input" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 10 }}>
+          <input className="input" type={visibility ? undefined : "password"} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}
+            style={{ width: 283 }} />
+          <Icon style={{ marginTop: 10 }} onClick={() => setVisibility(!visibility)}>
+            {visibility ? <Visibility /> : <VisibilityOff />}
+          </Icon>
+        </div>
         <div className="error-message">{validationState.password != "valid" ? validationState.password : ""}</div>
 
 
