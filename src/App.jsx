@@ -180,7 +180,7 @@ export default function App() {
   return (
     <div style={{
       position: "relative", width: "100%", height: "100%", overflowX: "hidden",
-      backgroundColor: "#0b3b5a"
+      backgroundColor: "linear-gradient(rgb(11, 59, 90) 0%, rgb(11, 59, 90) 100%)"
     }}>
 
       <AnimatePresence mode="wait">

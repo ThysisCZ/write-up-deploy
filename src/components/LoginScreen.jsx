@@ -30,8 +30,6 @@ export default function LoginScreen({ onSignUp = () => { }, onLoginSuccess = () 
     if (!password) { isValid = false; newValidationState.password = "Please enter your password"; }
     if (!email) { isValid = false; newValidationState.email = "Please enter your email"; }
 
-    setValidationState(newValidationState);
-
     if (isValid) {
       // Call backend to log in user
       const result = await FetchHelper.user.login(
@@ -40,11 +38,20 @@ export default function LoginScreen({ onSignUp = () => { }, onLoginSuccess = () 
           password: password
         }
       )
-      console.log(result)
+      console.log(result);
+
+      const response = result.response;
 
       // If request is succesful
-      if (result.ok) {
-        const response = result.response;
+      if (!result.ok) {
+        if (response.message === 'Invalid password') {
+          newValidationState.password = response.message
+        } else {
+          newValidationState.email = response.message
+        }
+
+        newValidationState.overall = "Something went wrong...";
+      } else {
         // Response is succesful, handle response data
         if (response.accessToken) {
           loginLocal(response)
@@ -53,7 +60,11 @@ export default function LoginScreen({ onSignUp = () => { }, onLoginSuccess = () 
           newValidationState.overall = response.message ?? "Something went wrong...";
         }
       }
+    } else {
+      newValidationState.overall = "Something went wrong...";
     }
+
+    setValidationState(newValidationState);
   }
 
   return (
