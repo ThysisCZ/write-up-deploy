@@ -18,45 +18,68 @@ function Chapter({ setScreen }) {
 
     const isAuthor = localStorage.getItem("authorId") !== "null";
 
-    const [comments, setComments] = useState([
-        {
-            id: "1",
-            username: "Jirka",
-            text: "Super kapitola bro 🔥"
-        },
-        {
-            id: "2",
-            username: "Oleksandr",
-            text: "Je to top 👍"
-        },
-        {
-            id: "3",
-            username: "Honza",
-            text: "Jen tak dál 🙌"
-        }
-    ]);
+    const [commentCall, setCommentCall] = useState("inactive");
+    const [comments, setComments] = useState([]);
 
     const [newCommentText, setNewCommentText] = useState("");
     const [commentToDelete, setCommentToDelete] = useState(null);
 
-    const handleAddComment = () => {
-        const username = localStorage.getItem("username");
-
-        const newComment = {
-            id: Date.now(),
-            username,
+    const handleAddComment = async () => {
+        const dtoIn = {
             text: newCommentText.trim()
-        };
+        }
 
-        setComments(prev => [newComment, ...prev]);
-        setNewCommentText("");
+        setCommentCall("pending");
+
+        try {
+            const result = await FetchHelper.books.chapters.comments.create(
+                dtoIn,
+                bookId,
+                chapterId
+            )
+
+            if (result) {
+                setComments(prev => [result, ...prev]);
+                console.log(result);
+                setNewCommentText("");
+
+                loadComments();
+            } else {
+                setCommentCall("error");
+            }
+        } catch (err) {
+            console.error(err);
+            setCommentCall("error");
+        }
+
     };
 
-    const handleDeleteComment = (id) => {
-        const updatedComments = comments.filter(comment => comment.id !== id);
+    const handleDeleteComment = async (id) => {
+        const comment = comments.find(com => com.id === id);
 
-        setComments(updatedComments);
-        setCommentToDelete(null);
+        setCommentCall("pending");
+
+        try {
+            const result = await FetchHelper.books.chapters.comments.delete(
+                undefined,
+                bookId,
+                chapterId,
+                comment.id
+            )
+
+            if (result) {
+                const updatedComments = comments.filter(comment => comment.id !== id);
+
+                setComments(updatedComments);
+                setCommentToDelete(null);
+                setCommentCall("success");
+            } else {
+                setCommentCall("error");
+            }
+        } catch (err) {
+            console.error(err);
+            setCommentCall("error");
+        }
     };
 
     const loadChapter = async () => {
@@ -82,9 +105,32 @@ function Chapter({ setScreen }) {
         }
     };
 
-    // Load chapter on mount
+    const loadComments = async () => {
+        setCommentCall("pending");
+
+        try {
+            const result = await FetchHelper.books.chapters.comments.list(
+                undefined,
+                bookId,
+                chapterId
+            )
+
+            if (result) {
+                setComments(result.response);
+                setCommentCall("success");
+            } else {
+                setCommentCall("error");
+            }
+        } catch (err) {
+            console.error(err);
+            setCommentCall("error");
+        }
+    };
+
+    // Load chapter and comments on mount
     useEffect(() => {
         loadChapter();
+        loadComments();
     }, []);
 
     // Loading state
@@ -203,12 +249,12 @@ function Chapter({ setScreen }) {
                                 <div className="comment" key={comment.id}>
                                     <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
                                         <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 10 }}>
-                                            <Avatar sx={{ bgcolor: "white", color: "black" }}>{comment.username.slice(0, 1)}</Avatar>
+                                            <Avatar sx={{ bgcolor: "white", color: "black" }}>{comment.userId?.slice(0, 1)}</Avatar>
                                             <div>
-                                                <b>{comment.username}</b>
+                                                <b>{comment.userId}</b>
                                             </div>
                                         </div>
-                                        {comment.username === localStorage.getItem("username") &&
+                                        {comment.userId === localStorage.getItem("userId") &&
                                             <div style={{ margin: 10 }}>
                                                 <button className="ds-btn ds-btn-danger" onClick={() => setCommentToDelete(comment)}>Delete</button>
                                             </div>
