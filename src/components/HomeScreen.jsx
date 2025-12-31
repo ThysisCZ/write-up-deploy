@@ -47,7 +47,7 @@ export default function HomeScreen({
 
     const isAuthor = localStorage.getItem("authorId") !== "null" && localStorage.getItem("authorId") !== null;
 
-    const loadBooks = async (sourceBooks, bookOffset=bookRange) => {
+    const loadBooks = async (sourceBooks, bookOffset = bookRange) => {
 
         // Fetch books online
         sourceBooks = [];
@@ -55,9 +55,9 @@ export default function HomeScreen({
         if (isAuthor) {
             sourceBooks = await fetchClientBooks();
         } else {
-            var searchParams = {offset:bookOffset, limit:20}
+            var searchParams = { offset: bookOffset, limit: 20 }
 
-            if (search!=="") {
+            if (search !== "") {
                 if (searchMode === "name") searchParams.name = search
                 if (searchMode === "genre") searchParams.genre = search
             }
@@ -92,7 +92,8 @@ export default function HomeScreen({
             let genres = new Set();
 
             for (let book of sb) {
-                genres.add(book.genre)
+                const modifiedGenre = book.genre.trim().toLowerCase();
+                genres.add(modifiedGenre);
             }
 
             const genresCount = genres.size;
@@ -114,11 +115,6 @@ export default function HomeScreen({
     useEffect(() => {
         loadBooks(books);
     }, [books]);
-
-    const openView = (book) => {
-        setOpenBook(book);
-        setModalMode("view");
-    };
 
     const handleLogout = () => {
         setLogoutCall({ state: "pending" });
@@ -234,51 +230,51 @@ export default function HomeScreen({
                 </> : <div className="mybooks-root">
                     <main className="mybooks-main">
 
-                        <Stack direction="horizontal" style={{ justifyContent:"center"}}>
-                        <SearchField value={search} onChange={setSearch}/>
-                        <button className="ds-btn ds-btn-primary" style={{height:"30px", marginTop:"12px", paddingTop:"4px"}} 
-                            onClick = {
-                                () => {
-                                    loadBooks(null,bookRange)
+                        <Stack direction="horizontal" style={{ justifyContent: "center" }}>
+                            <SearchField value={search} onChange={setSearch} />
+                            <button className="ds-btn ds-btn-primary" style={{ height: "30px", marginTop: "12px", paddingTop: "4px" }}
+                                onClick={
+                                    () => {
+                                        loadBooks(null, bookRange)
+                                    }
                                 }
-                            }
-                        ><SearchIcon/></button>
+                            ><SearchIcon /></button>
                         </Stack>
-                        <Stack direction="horizontal" style={{justifyContent:"center", marginBottom:"24px"}}>
-                            Search by 
-                            <Stack direction="horizontal" style={{marginLeft:"8px"}}>
-                                { searchMode === "name" ? <button className="ds-btn ds-btn-primary" style={{borderTopRightRadius:"0px",borderBottomRightRadius:"0px"}}>Name</button> : <></> }
-                                { searchMode !== "name" ? <button className="ds-btn ds-btn-secondary" onClick={()=>{setSearchMode("name")}} style={{borderTopRightRadius:"0px",borderBottomRightRadius:"0px"}}>Name</button> : <></> }
-                                { searchMode === "genre" ? <button className="ds-btn ds-btn-primary" style={{borderTopLeftRadius:"0px",borderBottomLeftRadius:"0px"}}>Genre</button> : <></> }
-                                { searchMode !== "genre" ? <button className="ds-btn ds-btn-secondary" onClick={()=>{setSearchMode("genre")}} style={{borderTopLeftRadius:"0px",borderBottomLeftRadius:"0px"}}>Genre</button> : <></> }
+                        <Stack direction="horizontal" style={{ justifyContent: "center", marginBottom: "24px" }}>
+                            Search by
+                            <Stack direction="horizontal" style={{ marginLeft: "8px" }}>
+                                {searchMode === "name" ? <button className="ds-btn ds-btn-primary" style={{ borderTopRightRadius: "0px", borderBottomRightRadius: "0px" }}>Name</button> : <></>}
+                                {searchMode !== "name" ? <button className="ds-btn ds-btn-secondary" onClick={() => { setSearchMode("name") }} style={{ borderTopRightRadius: "0px", borderBottomRightRadius: "0px" }}>Name</button> : <></>}
+                                {searchMode === "genre" ? <button className="ds-btn ds-btn-primary" style={{ borderTopLeftRadius: "0px", borderBottomLeftRadius: "0px" }}>Genre</button> : <></>}
+                                {searchMode !== "genre" ? <button className="ds-btn ds-btn-secondary" onClick={() => { setSearchMode("genre") }} style={{ borderTopLeftRadius: "0px", borderBottomLeftRadius: "0px" }}>Genre</button> : <></>}
                             </Stack>
                         </Stack>
 
-                        <Stack direction="horizontal" style={{justifyContent:"space-evenly"}}>
-                            <button className="ds-btn" 
-                            onClick={ ()=>{ 
-                                setBookRange(0)
-                                loadBooks(null,0)
-                            }}
-                            ><KeyboardDoubleArrowLeftIcon style={{fontSize:"24px"}}/></button>
-
-                            <button className="ds-btn" 
-                            onClick={ ()=>{ 
-                                if (bookRange>0) {
-                                    setBookRange(bookRange-20)
-                                    loadBooks(null,bookRange-20)
-                                }
-                            }}
-                            ><KeyboardArrowLeftIcon style={{fontSize:"24px"}}/></button>
-
-                            { `${bookRange} - ${bookRange+20}` }
+                        <Stack direction="horizontal" style={{ justifyContent: "space-evenly" }}>
+                            <button className="ds-btn"
+                                onClick={() => {
+                                    setBookRange(0)
+                                    loadBooks(null, 0)
+                                }}
+                            ><KeyboardDoubleArrowLeftIcon style={{ fontSize: "24px" }} /></button>
 
                             <button className="ds-btn"
-                            onClick={ ()=>{ 
-                                setBookRange(bookRange+20)
-                                loadBooks(null,bookRange+20)
-                            }}
-                            ><KeyboardArrowRightIcon style={{fontSize:"24px"}}/></button>
+                                onClick={() => {
+                                    if (bookRange > 0) {
+                                        setBookRange(bookRange - 20)
+                                        loadBooks(null, bookRange - 20)
+                                    }
+                                }}
+                            ><KeyboardArrowLeftIcon style={{ fontSize: "24px" }} /></button>
+
+                            {`${bookRange} - ${bookRange + 20}`}
+
+                            <button className="ds-btn"
+                                onClick={() => {
+                                    setBookRange(bookRange + 20)
+                                    loadBooks(null, bookRange + 20)
+                                }}
+                            ><KeyboardArrowRightIcon style={{ fontSize: "24px" }} /></button>
                         </Stack>
 
                         <div className="books-list">
@@ -296,7 +292,7 @@ export default function HomeScreen({
                                         </div>
 
                                         <div className="book-actions">
-                                            <button className="btn btn-view" onClick={() => setScreen(`/book/${b.id}`,1)}>View</button>
+                                            <button className="btn btn-view" onClick={() => setScreen(`/book/${b.id}`, 1)}>View</button>
                                         </div>
                                     </div>
                                 ))}
