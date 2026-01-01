@@ -36,7 +36,7 @@ export default function SignUpScreen({ onLogin = () => { }, onRegisterSuccess = 
       overall: "valid"
     }
 
-    if (!username) { isValid = false; newValidationState.username = "A username is required"; }
+    if (!username) { isValid = false; newValidationState.username.push("A username is required") }
     if (!email) { isValid = false; newValidationState.email = "An email is required"; }
     if (!password) { isValid = false; newValidationState.password.push("A password is required") }
 
@@ -65,6 +65,12 @@ export default function SignUpScreen({ onLogin = () => { }, onRegisterSuccess = 
       // If request is succesful
       if (!result.ok) {
         newValidationState.overall = "Something went wrong...";
+
+        if (result.response.message === "User already exists") {
+          newValidationState.overall = "This user already exists"
+        }
+
+        console.log(result)
       } else {
         // Response is succesful, handle response data
         if (!isAuthor) {

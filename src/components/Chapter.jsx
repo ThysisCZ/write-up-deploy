@@ -20,6 +20,7 @@ function Chapter({ setScreen }) {
 
     const [commentCall, setCommentCall] = useState("inactive");
     const [comments, setComments] = useState([]);
+    const [commentValid, setCommentValid] = useState(true);
 
     const [newCommentText, setNewCommentText] = useState("");
     const [commentToDelete, setCommentToDelete] = useState(null);
@@ -42,6 +43,11 @@ function Chapter({ setScreen }) {
                 setComments(prev => [result, ...prev]);
                 console.log(result);
                 setNewCommentText("");
+                setCommentValid(true);
+
+                if (result.status === 400) {
+                    setCommentValid(false);
+                }
 
                 loadComments();
             } else {
@@ -223,16 +229,31 @@ function Chapter({ setScreen }) {
 
                             {!isAuthor && (
                                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                                    <TextField
-                                        multiline
-                                        fullWidth
-                                        variant="filled"
-                                        label="Write a comment"
-                                        maxRows={4}
-                                        value={newCommentText}
-                                        onChange={(e) => setNewCommentText(e.target.value)}
-                                        style={{ backgroundColor: "white" }}
-                                    />
+                                    {commentValid ?
+                                        <TextField
+                                            multiline
+                                            fullWidth
+                                            variant="filled"
+                                            label="Write a comment"
+                                            maxRows={4}
+                                            value={newCommentText}
+                                            onChange={(e) => setNewCommentText(e.target.value)}
+                                            style={{ backgroundColor: "white" }}
+                                        /> :
+                                        <TextField
+                                            error
+                                            id="outlined-error-helper-text"
+                                            helperText="No less than 5 characters allowed."
+                                            multiline
+                                            fullWidth
+                                            variant="filled"
+                                            label="Write a comment"
+                                            maxRows={4}
+                                            value={newCommentText}
+                                            onChange={(e) => setNewCommentText(e.target.value)}
+                                            style={{ backgroundColor: "white" }}
+                                        />
+                                    }
 
                                     <button
                                         className="ds-btn ds-btn-primary"

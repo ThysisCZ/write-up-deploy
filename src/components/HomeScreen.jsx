@@ -1,7 +1,6 @@
 // src/components/HomeScreen.jsx
 import { ClipLoader } from "react-spinners";
 import { useState, useEffect } from "react";
-import BackArrow from "./generic/BackArrow";
 import PageNavbar from "./generic/PageNavbar";
 import LogoutIcon from "@mui/icons-material/Logout";
 import "../styles/home.css";
@@ -128,9 +127,7 @@ export default function HomeScreen({
     return (
         <div className="home-root">
             <header className="home-header">
-                <div className="header-left">
-                    <BackArrow onClick={() => setScreen && setScreen("/login", -1)} />
-                </div>
+                <div className="header-left" />
                 <div className="header-center">
                     <Stack>
                         <h1 className="home-title">Welcome back, {localStorage.getItem("username")}</h1>
@@ -197,7 +194,7 @@ export default function HomeScreen({
                                     </div>
                                 ) : (
                                     recentBooks.map((b) => (
-                                        <div className="recent-item" key={b.id} role="listitem" onClick={() => onViewMyBooks && onViewMyBooks()}>
+                                        <div className="recent-item" key={b.id} role="listitem" onClick={() => setScreen(`book/${b.id}`, 1)}>
                                             <div className="recent-icon">📗</div>
                                             <div className="recent-body">
                                                 <div className="recent-title">{b.name}</div>

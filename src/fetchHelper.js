@@ -1,20 +1,20 @@
 function dataURLToBlob(dataUrl) {
-  const [header, base64] = dataUrl.split(",");
-  const mimeMatch = header.match(/:(.*?);/);
-  const mime = mimeMatch ? mimeMatch[1] : "application/octet-stream";
+    const [header, base64] = dataUrl.split(",");
+    const mimeMatch = header.match(/:(.*?);/);
+    const mime = mimeMatch ? mimeMatch[1] : "application/octet-stream";
 
-  const binary = atob(base64);
-  const array = new Uint8Array(binary.length);
+    const binary = atob(base64);
+    const array = new Uint8Array(binary.length);
 
-  for (let i = 0; i < binary.length; i++) {
-    array[i] = binary.charCodeAt(i);
-  }
+    for (let i = 0; i < binary.length; i++) {
+        array[i] = binary.charCodeAt(i);
+    }
 
-  return new Blob([array], { type: mime });
+    return new Blob([array], { type: mime });
 }
 
 async function Upload(baseUri, dtoIn) {
-    
+
     try {
         let response;
 
@@ -25,15 +25,15 @@ async function Upload(baseUri, dtoIn) {
         formData.append("avatar", imageBlob, "image.png")
 
         response = await fetch(`${baseUri}/profile/upload`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-                    },
-                    body: formData
-                }
-            ); 
-        
+            {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                },
+                body: formData
+            }
+        );
+
         let data = {}
 
         if (response) {
@@ -100,7 +100,7 @@ async function Call(baseUri, useCase, dtoIn, method, token = undefined) {
 }
 
 ///TODO: replace za produkční url nebo to načítejte idalně z .env 💋
-const baseUri = "https://test-be.write-up.eu/api/v1";
+const baseUri = "https://be.write-up.eu/api/v1";
 
 
 const FetchHelper = {
