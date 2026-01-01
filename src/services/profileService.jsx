@@ -58,8 +58,6 @@ export async function updateProfile(patch) {
     console.log(resultImg)
   }
 
-  return patch
-
   const result = await FetchHelper.profile.edit(
     {
         id: localStorage.getItem("authorId"),
