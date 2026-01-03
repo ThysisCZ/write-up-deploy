@@ -32,7 +32,7 @@ function fileToDataUrl(file) {
 export default function ProfileScreen() {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
-  
+
   // ЛОГІКА ЗАВДАННЯ №59: Перевіряємо, чи ми на сторінці автора
   const isAuthorView = window.location.pathname.includes("author");
 
@@ -143,7 +143,6 @@ export default function ProfileScreen() {
     title: { fontSize: 40, fontWeight: 900, margin: "10px 0 18px", letterSpacing: -0.4 },
     sectionTitle: { fontSize: 20, fontWeight: 900, margin: "18px 0 12px" },
     panel: { background: "rgba(6, 38, 61, 0.70)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 18, padding: 16, boxShadow: "0 10px 26px rgba(0,0,0,0.25)" },
-    input: { width: "100%", padding: "14px 16px", borderRadius: 16, border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.05)", color: "#fff", outline: "none", fontSize: 16 },
     label: { fontSize: 16, fontWeight: 900, margin: "18px 0 10px" },
     error: { color: "#ff8c8c", fontSize: 13, marginTop: 8 },
     avatarWrap: { width: 74, height: 74, borderRadius: "50%", border: "2px solid rgba(46, 126, 183, 0.55)", display: "grid", placeItems: "center", overflow: "hidden", background: "rgba(0,0,0,0.15)" },
@@ -172,8 +171,8 @@ export default function ProfileScreen() {
         <div style={s.topBar}>
           <button style={s.backBtn} onClick={() => navigate("/home")}>Back</button>
           <div style={{ opacity: 0.65, fontWeight: 800 }}>
-             {/* Змінюємо заголовок в шапці */}
-             {isAuthorView ? "Author Profile" : "My Profile"}
+            {/* Змінюємо заголовок в шапці */}
+            {isAuthorView ? "Author Profile" : "My Profile"}
           </div>
         </div>
 
@@ -194,11 +193,11 @@ export default function ProfileScreen() {
         </div>
 
         <div style={s.sectionTitle}>Contact</div>
-        <div style={s.panel}><div style={s.input}>{profile?.email}</div></div>
+        <div style={s.panel}><div className="input" style={{ marginTop: 0 }}>{profile?.email}</div></div>
 
         <div style={s.sectionTitle}>Bio</div>
         <div style={s.panel}>
-          <div style={{ ...s.input, minHeight: 130, whiteSpace: "pre-wrap" }}>{profile?.bio}</div>
+          <div className="input" style={{ minHeight: 130, whiteSpace: "pre-wrap", marginTop: 0 }}>{profile?.bio}</div>
         </div>
 
         {/* ГОЛОВНА ЗМІНА: Кнопка редагування зникає, якщо це автор */}
