@@ -1,22 +1,25 @@
-// src/components/ProfileScreen.jsx
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageNavbar from "./generic/PageNavbar.jsx";
 import { getProfile, updateProfile } from "../services/profileService.jsx";
 import "../styles/profile.css";
 
+// Валідація форми
 function validate(form) {
   const errors = {};
-
-  if (!form.username?.trim()) errors.username = "Username is required.";
-  if (!form.email?.trim()) errors.email = "Email is required.";
-  else if (!/^\S+@\S+\.\S+$/.test(form.email.trim())) errors.email = "Email is not valid.";
-
-  if (form.bio && form.bio.length > 800) errors.bio = "Bio must be max 800 characters.";
-
+  if (!form.name?.trim()) errors.name = "Name is required.";
+  if (!form.email?.trim()) {
+    errors.email = "Email is required.";
+  } else if (!/^\S+@\S+\.\S+$/.test(form.email.trim())) {
+    errors.email = "Email is not valid.";
+  }
+  if (form.bio && form.bio.length > 800) {
+    errors.bio = "Bio must be max 800 characters.";
+  }
   return errors;
 }
 
+// Конвертація файлу в base64
 function fileToDataUrl(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -28,88 +31,89 @@ function fileToDataUrl(file) {
 
 export default function ProfileScreen() {
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
+  
+  // ЛОГІКА ЗАВДАННЯ №59: Перевіряємо, чи ми на сторінці автора
+  const isAuthorView = window.location.pathname.includes("author");
 
+  // Стейт
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-
   const [profile, setProfile] = useState(null);
   const [form, setForm] = useState({
-    username: "",
+    name: "",
     email: "",
     bio: "",
-    imgUrl: ""
+    avatarDataUrl: ""
   });
-
   const [touched, setTouched] = useState({});
-  const errors = useMemo(() => validate(form), [form]);
-  const fileInputRef = useRef(null);
 
+  const errors = useMemo(() => validate(form), [form]);
+
+  // Завантаження профілю
   useEffect(() => {
     let mounted = true;
-    (async () => {
+    const fetchProfile = async () => {
       setLoading(true);
       try {
         const p = await getProfile();
         if (!mounted) return;
-
         setProfile(p);
         setForm({
-          username: p.username ?? "",
-          email: p.email ?? "",
-          bio: p.bio ?? "",
-          imgUrl: p.imgUrl ?? ""
+          name: p?.name ?? "",
+          email: p?.email ?? "",
+          bio: p?.bio ?? "",
+          avatarDataUrl: p?.avatarDataUrl ?? ""
         });
       } finally {
         if (mounted) setLoading(false);
       }
-    })();
-
-    return () => {
-      mounted = false;
     };
+    fetchProfile();
+    return () => { mounted = false; };
   }, []);
 
-  function onChange(e) {
+  // Обробники подій
+  const onChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  }
+    setForm(prev => ({ ...prev, [name]: value }));
+  };
 
-  function onBlur(e) {
+  const onBlur = (e) => {
     const { name } = e.target;
-    setTouched((prev) => ({ ...prev, [name]: true }));
-  }
+    setTouched(prev => ({ ...prev, [name]: true }));
+  };
 
-  function startEdit() {
+  const startEdit = () => {
     setTouched({});
     setIsEditing(true);
-  }
+  };
 
-  function cancelEdit() {
+  const cancelEdit = () => {
     if (!profile) return;
     setTouched({});
     setForm({
-      username: profile.username ?? "",
+      name: profile.name ?? "",
       email: profile.email ?? "",
       bio: profile.bio ?? "",
-      imgUrl: profile.imgUrl ?? ""
+      avatarDataUrl: profile.avatarDataUrl ?? ""
     });
     setIsEditing(false);
-  }
+  };
 
-  async function confirmEdit() {
-    setTouched({ username: true, email: true, bio: true });
-    const currentErrors = validate(form);
-    if (Object.keys(currentErrors).length > 0) return;
+  const confirmEdit = async () => {
+    setTouched({ name: true, email: true, bio: true });
+    if (Object.keys(validate(form)).length > 0) return;
 
     setSaving(true);
 
     try {
       const updated = await updateProfile({
-        username: form.username.trim(),
+        name: form.name.trim(),
         email: form.email.trim(),
         bio: form.bio,
-        imgUrl: form.imgUrl
+        avatarDataUrl: form.avatarDataUrl
       });
 
       setProfile({ ...profile, ...updated });
@@ -118,20 +122,44 @@ export default function ProfileScreen() {
     } finally {
       setSaving(false);
     }
-  }
+  };
 
-  async function onPickImage(e) {
+  const onPickImage = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const dataUrl = await fileToDataUrl(file);
-    setForm((prev) => ({ ...prev, imgUrl: dataUrl }));
-  }
+    try {
+      const dataUrl = await fileToDataUrl(file);
+      setForm(prev => ({ ...prev, avatarDataUrl: dataUrl }));
+    } catch (err) {
+      console.error("Image upload failed", err);
+    }
+  };
+
+  // ОБ'ЄКТ СТИЛІВ
+  const s = {
+    page: { minHeight: "100vh", padding: "22px 18px 140px", color: "#fff", background: "var(--app-bg, #1b3b53)" },
+    topBar: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 10 },
+    backBtn: { padding: "10px 12px", borderRadius: 14, border: "1px solid rgba(255,255,255,0.10)", background: "rgba(255,255,255,0.04)", color: "#fff", cursor: "pointer", fontWeight: 800 },
+    title: { fontSize: 40, fontWeight: 900, margin: "10px 0 18px", letterSpacing: -0.4 },
+    sectionTitle: { fontSize: 20, fontWeight: 900, margin: "18px 0 12px" },
+    panel: { background: "rgba(6, 38, 61, 0.70)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 18, padding: 16, boxShadow: "0 10px 26px rgba(0,0,0,0.25)" },
+    input: { width: "100%", padding: "14px 16px", borderRadius: 16, border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.05)", color: "#fff", outline: "none", fontSize: 16 },
+    label: { fontSize: 16, fontWeight: 900, margin: "18px 0 10px" },
+    error: { color: "#ff8c8c", fontSize: 13, marginTop: 8 },
+    avatarWrap: { width: 74, height: 74, borderRadius: "50%", border: "2px solid rgba(46, 126, 183, 0.55)", display: "grid", placeItems: "center", overflow: "hidden", background: "rgba(0,0,0,0.15)" },
+    primaryBtn: { width: "100%", padding: "16px 18px", borderRadius: 18, border: "none", background: "#ffffff", color: "#0b2540", fontSize: 18, fontWeight: 900, cursor: "pointer", marginTop: 18 },
+    uploadBtn: { width: "100%", padding: "16px 18px", borderRadius: 18, border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.04)", color: "#a8d7ff", fontWeight: 900, cursor: "pointer" },
+    btnRow: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginTop: 18 },
+    cancelBtn: { padding: "16px 18px", borderRadius: 18, border: "1px solid rgba(255,80,80,0.35)", background: "rgba(255, 68, 68, 0.16)", color: "#ffd6d6", fontWeight: 900, cursor: "pointer" },
+    confirmBtn: { padding: "16px 18px", borderRadius: 18, border: "none", background: "#ffffff", color: "#0b2540", fontWeight: 900, cursor: "pointer" },
+    disabled: { opacity: 0.6, cursor: "not-allowed" }
+  };
 
   if (loading) {
     return (
-      <div className="page">
-        <div className="title">Author's profile</div>
-        <div className="panel">Loading...</div>
+      <div style={s.page}>
+        <div style={s.topBar}><button style={s.backBtn} onClick={() => navigate("/home")}>Back</button></div>
+        <div style={s.title}>Loading profile...</div>
         <PageNavbar />
       </div>
     );
@@ -140,179 +168,89 @@ export default function ProfileScreen() {
   // ===== VIEW MODE =====
   if (!isEditing) {
     return (
-      <div className="page">
-        <div className="title">Author's profile</div>
-
-        <div className="section-title">Personal information</div>
-        <div className="panel" style={{ display: "flex", gap: 14, alignItems: "center" }}>
-          <div className="avatar-wrap">
-            {profile?.imgUrl ? (
-              <img
-                src={profile.imgUrl}
-                alt="avatar"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
-            ) : (
-              <div style={{ fontSize: 30, opacity: 0.65 }}>👤</div>
-            )}
-          </div>
-
-          <div style={{ lineHeight: 1.45 }}>
-            <div style={{ fontSize: 16, opacity: 0.65 }}>Name</div>
-            <div style={{ fontSize: 20, fontWeight: 900 }}>{profile?.username}</div>
+      <div style={s.page}>
+        <div style={s.topBar}>
+          <button style={s.backBtn} onClick={() => navigate("/home")}>Back</button>
+          <div style={{ opacity: 0.65, fontWeight: 800 }}>
+             {/* Змінюємо заголовок в шапці */}
+             {isAuthorView ? "Author Profile" : "My Profile"}
           </div>
         </div>
 
-        <div className="section-title">Contact</div>
-        <div className="panel">
-          <div className="input-like">{profile?.email}</div>
-        </div>
+        {/* Змінюємо головний заголовок */}
+        <div style={s.title}>{isAuthorView ? "Author details" : "My profile"}</div>
 
-        <div className="section-title">Bio</div>
-        <div className="panel">
-          <div className="input-like" style={{ minHeight: 130, lineHeight: 1.5, whiteSpace: "pre-wrap" }}>
-            {profile?.bio}
+        <div style={s.sectionTitle}>Personal information</div>
+        <div style={{ ...s.panel, display: "flex", gap: 14, alignItems: "center" }}>
+          <div style={s.avatarWrap}>
+            {profile?.avatarDataUrl ? (
+              <img src={profile.avatarDataUrl} alt="avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            ) : <div style={{ fontSize: 30, opacity: 0.65 }}>👤</div>}
+          </div>
+          <div>
+            <div style={{ fontSize: 14, opacity: 0.65 }}>Name</div>
+            <div style={{ fontSize: 20, fontWeight: 900 }}>{profile?.name}</div>
           </div>
         </div>
 
-        <button className="primary-big" onClick={startEdit}>
-          Edit Profile
-        </button>
+        <div style={s.sectionTitle}>Contact</div>
+        <div style={s.panel}><div style={s.input}>{profile?.email}</div></div>
+
+        <div style={s.sectionTitle}>Bio</div>
+        <div style={s.panel}>
+          <div style={{ ...s.input, minHeight: 130, whiteSpace: "pre-wrap" }}>{profile?.bio}</div>
+        </div>
+
+        {/* ГОЛОВНА ЗМІНА: Кнопка редагування зникає, якщо це автор */}
+        {!isAuthorView && (
+          <button style={s.primaryBtn} onClick={startEdit}>Edit Profile</button>
+        )}
 
         <PageNavbar />
       </div>
     );
   }
 
-  // ===== EDIT MODE =====
+  // ===== EDIT MODE (Тільки для власника) =====
   return (
-    <div className="page">
-
-      <div className="title">Edit author's profile</div>
-
-      <div className="label">Username</div>
-      <input
-        name="username"
-        value={form.username}
-        onChange={onChange}
-        onBlur={onBlur}
-        className="input-like"
-        placeholder="Name"
-      />
-      {touched.username && errors.username ? <div className="error">{errors.username}</div> : null}
-
-      {/*
-      <div className="label">Email</div>
-      <input
-        name="email"
-        value={form.email}
-        onChange={onChange}
-        onBlur={onBlur}
-        className="input-like"
-        placeholder="Email"
-      />
-      {touched.email && errors.email ? <div className="error">{errors.email}</div> : null}
-
-      */}
-
-      <div style={{ marginTop: 18 }}>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          onChange={onPickImage}
-          style={{ display: "none" }}
-        />
-        <button
-          type="button"
-          onClick={() => fileInputRef.current?.click()}
-          className="upload-btn" style={saving ? {
-            opacity: 0.65,
-            cursor: "not-allowed"
-          } : {}}
-          disabled={saving}
-        >
-          Upload image
-        </button>
-
-        {form.imgUrl ? (
-          <div style={{ marginTop: 12, display: "flex", gap: 12, alignItems: "center" }}>
-            <div className="avatar-wrap">
-              <img
-                src={form.imgUrl}
-                alt="preview"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setForm((p) => ({ ...p, imgUrl: "" }))}
-              style={{
-                padding: "12px 14px",
-                borderRadius: 14,
-                border: "1px solid rgba(255,255,255,0.12)",
-                background: "rgba(255,255,255,0.04)",
-                color: "#fff",
-                cursor: "pointer",
-                fontWeight: 900,
-                ...(saving ? {
-                  opacity: 0.65,
-                  cursor: "not-allowed"
-                } : {})
-              }}
-              disabled={saving}
-            >
-              Remove
-            </button>
-          </div>
-        ) : null}
+    <div style={s.page}>
+      <div style={s.topBar}>
+        <button style={{ ...s.backBtn, ...(saving && s.disabled) }} onClick={cancelEdit} disabled={saving}>Back</button>
+        <div style={{ opacity: 0.65, fontWeight: 800 }}>Edit Mode</div>
       </div>
 
-      <div className="label">Bio</div>
-      <textarea
-        name="bio"
-        value={form.bio}
-        onChange={onChange}
-        onBlur={onBlur}
-        rows={6}
-        className="input-like"
-        style={{ resize: "none" }}
-        placeholder="Bio"
-      />
-      <div style={{ opacity: 0.6, fontSize: 12, marginTop: 8 }}>{(form.bio || "").length}/800</div>
-      {touched.bio && errors.bio ? <div className="error">{errors.bio}</div> : null}
+      <div style={s.title}>Edit Profile</div>
 
-      <div className="btn-row">
-        <button
-          type="button"
-          className="cancel-btn"
-          style={{
-            ...(saving ? {
-              opacity: 0.65,
-              cursor: "not-allowed"
-            } : {})
-          }}
-          onClick={cancelEdit}
-          disabled={saving}
-        >
-          Cancel
-        </button>
+      <div style={s.label}>Name</div>
+      <input name="name" value={form.name} onChange={onChange} onBlur={onBlur} style={s.input} />
+      {touched.name && errors.name && <div style={s.error}>{errors.name}</div>}
 
-        <button
-          type="button"
-          className="confirm-btn"
-          style={{
-            ...(saving ? {
-              opacity: 0.65,
-              cursor: "not-allowed"
-            } : {})
-          }}
-          onClick={confirmEdit}
-          disabled={saving}
-        >
-          {saving ? "Saving..." : "Confirm"}
-        </button>
+      <div style={s.label}>Email</div>
+      <input name="email" value={form.email} onChange={onChange} onBlur={onBlur} style={s.input} />
+      {touched.email && errors.email && <div style={s.error}>{errors.email}</div>}
+
+      <div style={{ marginTop: 24 }}>
+        <input ref={fileInputRef} type="file" accept="image/*" onChange={onPickImage} style={{ display: "none" }} />
+        <button style={s.uploadBtn} onClick={() => fileInputRef.current?.click()} disabled={saving}>Upload New Image</button>
+
+        {form.avatarDataUrl && (
+          <div style={{ marginTop: 12, display: "flex", gap: 12, alignItems: "center" }}>
+            <div style={s.avatarWrap}>
+              <img src={form.avatarDataUrl} alt="preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            </div>
+            <button onClick={() => setForm(p => ({ ...p, avatarDataUrl: "" }))} style={{ color: "#ff8c8c", background: "none", border: "none", cursor: "pointer", fontWeight: 700 }}>Remove</button>
+          </div>
+        )}
+      </div>
+
+      <div style={s.label}>Bio</div>
+      <textarea name="bio" value={form.bio} onChange={onChange} onBlur={onBlur} rows={6} style={{ ...s.input, resize: "none" }} />
+      <div style={{ opacity: 0.5, fontSize: 12, marginTop: 8 }}>{form.bio.length}/800</div>
+      {touched.bio && errors.bio && <div style={s.error}>{errors.bio}</div>}
+
+      <div style={s.btnRow}>
+        <button style={s.cancelBtn} onClick={cancelEdit} disabled={saving}>Cancel</button>
+        <button style={s.confirmBtn} onClick={confirmEdit} disabled={saving}>{saving ? "Saving..." : "Confirm Changes"}</button>
       </div>
 
       <PageNavbar />

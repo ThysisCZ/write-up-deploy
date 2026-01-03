@@ -1,74 +1,41 @@
-// src/services/profileService.jsx
-
-import FetchHelper from "../fetchHelper";
-
 const STORAGE_KEY = "writeup.profile";
 
-const DEFAULT_PROFILE = {
-  name: "J. K. Rowling",
-  email: "jk.rowling@gmail.com",
-  bio:
-    "J. K. Rowling is the British novelist who wrote Harry Potter. A seven-volume Series about a young wizard. Published from 1997 to 2002. The bestselling series in history #HYFlover 600 million copies sold.",
-  avatarDataUrl: "" // base64 image from upload
+const MY_PROFILE = {
+  name: "Sasha",
+  email: "sashamistiuk1@gmail.com",
+  bio: "Тут буде інформація про користувача. Коротка біографія, жанри, інші деталі.",
+  avatarDataUrl: ""
 };
 
-function sleep(ms) {
-  return new Promise((r) => setTimeout(r, ms));
-}
+/**
+ * Task #59: Author Data for Reader View
+ */
+const AUTHOR_DATA = {
+  name: "J. K. Rowling",
+  email: "jk.rowling@gmail.com",
+  bio: "J. K. Rowling is the British novelist who wrote Harry Potter. A seven-volume Series about a young wizard.",
+  avatarDataUrl: ""
+};
 
+/**
+ * Fetches profile based on URL context for Task #59
+ */
 export async function getProfile() {
-  const result = await FetchHelper.profile.get({id: localStorage.getItem("authorId") })
-  
-  console.log(result)
-  if (result && result.ok) {
-    return result.response;
+  const isAuthorPage = window.location.pathname.includes("author");
+
+  if (isAuthorPage) {
+    return AUTHOR_DATA; 
   }
 
-  /*
-  await sleep(100);
   const raw = localStorage.getItem(STORAGE_KEY);
-
   if (!raw) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_PROFILE));
-    return DEFAULT_PROFILE;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(MY_PROFILE));
+    return MY_PROFILE;
   }
-
-  try {
-    return JSON.parse(raw);
-  } catch {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_PROFILE));
-    return DEFAULT_PROFILE;
-  }
-  */
+  return JSON.parse(raw);
 }
 
 export async function updateProfile(patch) {
-  console.log(patch)
-
-  if (patch.imgUrl) {
-      
-    const resultImg = await FetchHelper.profile.uploadImg(
-      { 
-        userId: localStorage.getItem("userId"),
-        file: patch.imgUrl  
-      }
-    )
-
-    console.log("IMG RESP")
-    console.log(resultImg)
-  }
-
-  const result = await FetchHelper.profile.edit(
-    {
-        id: localStorage.getItem("authorId"),
-        bio: patch.bio
-    }
-  )
-  if (result && result.ok) {
-    return patch
-  }
-  /*
-  await sleep(150);
   const current = await getProfile();
   const updated = { ...current, ...patch };
   localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
